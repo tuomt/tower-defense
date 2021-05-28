@@ -26,4 +26,8 @@ add_executable (td src/Armor.cpp
 
 # TODO: Add tests and install targets if needed.
 
-target_link_libraries(td sfml-graphics-d sfml-window-d sfml-system-d)
+if (UNIX)
+    target_link_libraries(td -pthread sfml-graphics sfml-window sfml-system)
+else ()
+    target_link_libraries(td sfml-graphics-d sfml-window-d sfml-system-d)
+endif(UNIX)
