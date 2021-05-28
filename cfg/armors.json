@@ -1,0 +1,29 @@
+[
+  {
+    "name": "T-34",
+    "texture": "t-34.png",
+    "textureRect": null,
+    "health": 400.0,
+    "speed": 100.0,
+    "strength": 0.1,
+    "destroyReward": 50
+  },
+  {
+    "name": "KV-1",
+    "texture": "kv-1.png",
+    "textureRect": null,
+    "health": 1200.0,
+    "speed": 60.0,
+    "strength": 0.25,
+    "destroyReward": 75
+  },
+  {
+    "name": "IS-3",
+    "texture": "is-3.png",
+    "textureRect": null,
+    "health": 1600.0,
+    "speed": 75.0,
+    "strength": 0.5,
+    "destroyReward": 100
+  }
+]

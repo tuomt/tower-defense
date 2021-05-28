@@ -1,0 +1,56 @@
+[
+  {
+    "name": "at_soldier",
+    "texture": "bazooka_man_merged.png",
+    "textureRect": [ 10, 10, 80, 80 ],
+    "shopScale": 0.8,
+    "projectiles": [
+      {
+        "name": "bazooka_rocket",
+        "texture": "rocket.png",
+        "damage": 100,
+        "speed": 300
+      }
+    ],
+    "muzzlePos": [ 49, 1 ],
+    "radius": 300.0,
+    "fireRate": 30.0,
+    "baseCost": 100
+  },
+  {
+    "name": "at_gun",
+    "texture": "M3_at_gun.png",
+    "textureRect": null,
+    "shopScale": 0.3,
+    "projectiles": [
+      {
+        "name": "bazooka_rocket",
+        "texture": "rocket.png",
+        "damage": 275,
+        "speed": 800
+      }
+    ],
+    "muzzlePos": [ 0, 66 ],
+    "radius": 500.0,
+    "fireRate": 20.0,
+    "baseCost": 200
+  },
+  {
+    "name": "soldier_3",
+    "texture": "bazooka_man_merged.png",
+    "textureRect": [ 10, 10, 80, 80 ],
+    "shopScale": 0.8,
+    "projectiles": [
+      {
+        "name": "bazooka_rocket",
+        "texture": "rocket.png",
+        "damage": 333,
+        "speed": 300
+      }
+    ],
+    "muzzlePos": [ 49, 1 ],
+    "radius": 500.0,
+    "fireRate": 50.0,
+    "baseCost": 300
+  }
+]
