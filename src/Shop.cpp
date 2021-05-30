@@ -17,6 +17,9 @@ void Shop::init(TextureManager& texManager, const sf::RenderWindow& window)
 
 	// Items
 	int i = 0;
+	const sf::Vector2f margin(20.f, 20.f);
+	auto itemPos = m_bar.getPosition();
+
 	for (auto& tower : m_towerAttributes) {
 		Item item(i);
 		std::string name = m_towerAttributes[i]["name"];
@@ -24,19 +27,19 @@ void Shop::init(TextureManager& texManager, const sf::RenderWindow& window)
 		// Set textures for the item
 		item.getSprite().setTexture(texManager.getTexture(name));
 		item.getBackground().setTexture(texManager.getTexture("shop_item_background"));
+		
 		// Scale the item
 		float scale = m_towerAttributes[i]["shopScale"];
 		item.getSprite().scale(scale, scale);
 
-		// Define margin for the item
-		const sf::Vector2f margin(20.f, 20.f);
+        // Set origin of the item's image sprite
+        auto spriteRect = item.getSprite().getTextureRect();
+        item.getSprite().setOrigin(sf::Vector2f(spriteRect.width / 2.f, spriteRect.height / 2.f));
 
 		// Set position of the item
-		sf::Vector2f pos = m_bar.getPosition();
-		pos.x += margin.x + i * item.getBackground().getTextureRect().width;
-		pos.x += i * margin.x;
-		pos.y += margin.y;
-		item.setPosition(pos);
+		auto bgRect = item.getBackground().getTextureRect();
+		item.setPosition(itemPos + margin);
+		itemPos.x += bgRect.width;
 
 		item.setCost(m_towerAttributes[i]["baseCost"]);
 		m_items.push_back(item);
@@ -185,7 +188,9 @@ void Shop::Item::setCost(unsigned long cost)
 void Shop::Item::setPosition(const sf::Vector2f& position)
 {
 	m_background.setPosition(position);
-	m_sprite.setPosition(position);
+	auto rect = m_background.getTextureRect();
+	auto bgCenter = sf::Vector2f(position.x + rect.width / 2.f, position.y + rect.height / 2.f);
+	m_sprite.setPosition(bgCenter);
 }
 
 void Shop::Item::draw(sf::RenderTarget& target, sf::RenderStates states) const
