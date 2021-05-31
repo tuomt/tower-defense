@@ -27,41 +27,26 @@ float Round::getAttackerStrength() const {
 }
 
 std::size_t Round::getMinArmorIndex() const {
-	std::size_t index;
-
 	switch (m_stage) {
 	case Stage::WW2:
 	case Stage::COLD_WAR:
-		index = 0;
-		break;
+		return 0;
 	case Stage::MODERN:
-		index = 3;
-		break;
+		return 3;
 	case Stage::FUTURE:
-		index = 6;
-		break;
+		return 6;
 	}
-
-	return index;
 }
 
 std::size_t Round::getMaxArmorIndex() const {
-	std::size_t index;
-
 	switch (m_stage) {
 	case Stage::WW2:
-		index = 2;
-		break;
+		return 2;
 	case Stage::COLD_WAR:
-		index = 5;
-		break;
+		return 5;
 	case Stage::MODERN:
-		index = 8;
-		break;
+		return 8;
 	case Stage::FUTURE:
-		index = 11;
-		break;
+		return 11;
 	}
-
-	return index;
 }
