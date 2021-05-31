@@ -73,3 +73,8 @@ const sf::Vector2f& HealthBar::getPosition() const
 {
 	return m_remainingBar[0].position;
 }
+
+const sf::Vector2f& HealthBar::getSize() const
+{
+	return sf::Vector2f(m_width, m_height);
+}
