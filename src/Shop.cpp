@@ -41,6 +41,9 @@ void Shop::init(TextureManager& texManager, const sf::RenderWindow& window)
 		item.setPosition(itemPos + margin);
 		itemPos.x += bgRect.width;
 
+		// Rotate the tower image
+		item.getSprite().rotate(-90.f);
+
 		item.setCost(m_towerAttributes[i]["baseCost"]);
 		m_items.push_back(item);
 		i++;

@@ -2,7 +2,7 @@
   {
     "name": "at_soldier",
     "texture": "bazooka_man_merged.png",
-    "textureRect": [ 10, 10, 80, 80 ],
+    "textureRect": [ 9, 12, 80, 80 ],
     "shopScale": 0.8,
     "projectiles": [
       {
@@ -12,7 +12,7 @@
         "speed": 300
       }
     ],
-    "muzzlePos": [ 49, 1 ],
+    "muzzlePos": [ 77, 46 ],
     "radius": 300.0,
     "fireRate": 30.0,
     "baseCost": 100
@@ -30,7 +30,7 @@
         "speed": 800
       }
     ],
-    "muzzlePos": [ 0, 66 ],
+    "muzzlePos": [ 199, 62 ],
     "radius": 500.0,
     "fireRate": 20.0,
     "baseCost": 200

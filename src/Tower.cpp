@@ -87,7 +87,7 @@ void Tower::setFireRate(float fireRate)
 void Tower::aim(const sf::Vector2f& target)
 {
 	float angle = radToDeg(getAngle(target, getPosition()));
-	setRotation(angle + 90.f);
+	setRotation(angle);
 	m_target = target;
 }
 
