@@ -15,6 +15,9 @@ Game::Game(sf::RenderWindow& window)
 	if (!m_font.loadFromFile(DEFAULT_FONT_PATH))
 		return;
 
+	// Position healthbar
+	m_healthBar.setPosition(m_window.getSize().x - 210.f, m_window.getSize().y - 110.f);
+
 	// Configure texts
 	m_roundText.setFont(m_font);
 	m_roundText.setCharacterSize(20);
@@ -25,7 +28,7 @@ Game::Game(sf::RenderWindow& window)
 
 	m_moneyText.setFont(m_font);
 	m_moneyText.setCharacterSize(20);
-	m_moneyText.setPosition(5.f, 30.f);
+	m_moneyText.setPosition(m_healthBar.getPosition().x, m_healthBar.getPosition().y + m_healthBar.getSize().y + 10.f);
 	m_moneyText.setOutlineColor(sf::Color::Black);
 	m_moneyText.setOutlineThickness(1.f);
 
@@ -229,6 +232,7 @@ void Game::draw()
 
 	m_window.draw(m_roundText);
 	m_window.draw(m_moneyText);
+	m_window.draw(m_healthBar);
 
 	m_window.draw(debugCircle);
 	m_window.draw(debugMuzzle);

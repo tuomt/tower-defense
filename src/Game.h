@@ -20,6 +20,9 @@ private:
 	sf::Text m_roundText;
 	sf::Text m_moneyText;
 
+	float m_health = 1000.f;
+	HealthBar m_healthBar = sf::Vector2f(200.f, 30.f);
+
 	enum class MouseState { RELEASED, PRESSED };
 	MouseState m_leftMouse = MouseState::RELEASED;
 	MouseState m_rightMouse = MouseState::RELEASED;
