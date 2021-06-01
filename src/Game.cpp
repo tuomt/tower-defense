@@ -147,6 +147,7 @@ void Game::update(float dt)
 						// All waypoints have been reached
 						// Remove armor
 						armor = m_armors.erase(armor);
+						break;
 					}
 				}
 				armor->move(armor->getVelocity().x * dt, armor->getVelocity().y * dt);
