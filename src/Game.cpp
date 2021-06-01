@@ -147,6 +147,16 @@ void Game::update(float dt)
 						// All waypoints have been reached
 						// Remove armor
 						armor = m_armors.erase(armor);
+						m_health -= 1.f;
+
+						if (m_health <= 0) {
+							// Game over
+							m_healthBar.setRemaining(0.f);
+						}
+						else {
+							m_healthBar.setRemaining(m_health / m_maxHealth);
+						}
+
 						break;
 					}
 				}
