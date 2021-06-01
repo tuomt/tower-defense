@@ -28,7 +28,6 @@ void HealthBar::setRemaining(float percentage)
 {
 	float width = percentage * m_width;
 	m_remainingWidth = width;
-	if (m_remainingWidth <= 0.f) return;
 
 	m_remainingBar[2].position.x = getPosition().x + width;
 	m_remainingBar[4].position.x = getPosition().x + width;
