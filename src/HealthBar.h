@@ -4,8 +4,7 @@
 class HealthBar : public sf::Drawable
 {
 private:
-	int m_width;
-	int m_height;
+	sf::Vector2f m_size;
 	float m_remainingWidth;
 	sf::VertexArray m_fullBar = sf::VertexArray(sf::Triangles, 6);
 	sf::VertexArray m_remainingBar = sf::VertexArray(sf::Triangles, 6);
