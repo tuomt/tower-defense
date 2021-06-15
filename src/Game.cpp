@@ -137,6 +137,10 @@ void Game::update(float dt)
 	bool oncePerArmor = true;
 
 	for (auto& tower : m_towers) {
+		if (&tower == &m_towers.back() && m_selectedItem) {
+			break;
+		}
+
 		bool hasTarget = false;
 
 		auto armor = m_armors.begin();
