@@ -134,44 +134,28 @@ void Game::update(float dt)
 		}
 	}
 
-	bool oncePerArmor = true;
+	auto armor = m_armors.begin();
+	bool oncePerTower = true;
 
-	for (auto& tower : m_towers) {
-		if (&tower == &m_towers.back() && m_selectedItem) {
-			break;
-		}
+	std::vector<bool> towerTargets(m_towers.size(), false);
 
-		bool hasTarget = false;
+	while (armor != m_armors.end()) {
+		bool armorErased = false;
+		armor->move(armor->getVelocity().x * dt, armor->getVelocity().y * dt);
 
-		auto armor = m_armors.begin();
-		while (armor != m_armors.end()) {
-			if (oncePerArmor) {
-				if (armor->hasReachedWaypoint()) {
-					if (armor->selectNextWaypoint() == false) {
-						// All waypoints have been reached
-						// Remove armor
-						armor = m_armors.erase(armor);
-						m_health -= 1.f;
+		int i = 0;
 
-						if (m_health <= 0) {
-							// Game over
-							m_healthBar.setRemaining(0.f);
-						}
-						else {
-							m_healthBar.setRemaining(m_health / m_maxHealth);
-						}
-
-						break;
-					}
-				}
-				armor->move(armor->getVelocity().x * dt, armor->getVelocity().y * dt);
+		for (auto& tower : m_towers) {
+			// Skip if the tower is being placed
+			if (&tower == &m_towers.back() && m_selectedItem) {
+				break;
 			}
 
-			// Check if there is an armor inside the tower's radius
-			if (!hasTarget && Collision::isInRadius(*armor, tower)) {
-				hasTarget = true;
+			// Check if the armor is inside the tower's radius
+			if (!towerTargets[i] && Collision::isInRadius(*armor, tower)) {
 				// Aim the tower at the armor
 				tower.aim(armor->getPosition());
+				towerTargets[i] = true;
 
 				if (tower.isReloading()) {
 					tower.reload(dt);
@@ -185,9 +169,16 @@ void Game::update(float dt)
 			auto proj = tower.getProjectiles().begin();
 			while (proj != tower.getProjectiles().end()) {
 
-				bool projectileCollides = Collision::collides(*armor, *proj);
+				if (oncePerTower) {
+					oncePerTower = false;
+					proj->move(proj->getVelocity().x * dt, proj->getVelocity().y * dt);
+					if (!proj->isInWindow(m_window)) {
+						proj = tower.getProjectiles().erase(proj);
+						continue;
+					}
+				}
 
-				if (projectileCollides) {
+				if (Collision::collides(*armor, *proj)) {
 					armor->setHealth(armor->getHealth() - proj->getDamage());
 					proj = tower.getProjectiles().erase(proj);
 				}
@@ -202,22 +193,29 @@ void Game::update(float dt)
 				setMoney(getMoney() + armor->getDestroyReward());
 				// Remove the armor
 				armor = m_armors.erase(armor);
+				armorErased = true;
+				break;
 			}
-			else ++armor;
+			i++;
 		}
-		oncePerArmor = false;
 
-		auto proj = tower.getProjectiles().begin();
-		while (proj != tower.getProjectiles().end()) {
-			// Check if the projectile is out of bounds
-			if (!proj->isInWindow(m_window)) {
-				proj = tower.getProjectiles().erase(proj);
+		if (armorErased) continue;
+
+		if (armor->hasReachedWaypoint() && armor->selectNextWaypoint() == false) {
+			// All waypoints have been reached
+			// Remove the armor
+			armor = m_armors.erase(armor);
+			m_health -= 1.f;
+
+			if (m_health <= 0) {
+				// Game over
+				m_healthBar.setRemaining(0.f);
 			}
 			else {
-				proj->move(proj->getVelocity().x * dt, proj->getVelocity().y * dt);
-				++proj;
+				m_healthBar.setRemaining(m_health / m_maxHealth);
 			}
 		}
+		else ++armor;
 	}
 
 	if (m_towers.size() > 0)
