@@ -200,7 +200,18 @@ void Game::update(float dt)
 
 		oncePerTower = false;
 
-		if (armorErased) continue;
+		if (armorErased) {
+			if (m_armors.empty() && m_armorQueue.empty()) {
+				// Remove all projectiles when there's no armors left
+				for (auto& tower : m_towers) {
+					tower.getProjectiles().clear();
+				}
+				break;
+			}
+			else {
+				continue;
+			}
+		}
 
 		if (armor->hasReachedWaypoint() && armor->selectNextWaypoint() == false) {
 			// All waypoints have been reached
