@@ -170,7 +170,6 @@ void Game::update(float dt)
 			while (proj != tower.getProjectiles().end()) {
 
 				if (oncePerTower) {
-					oncePerTower = false;
 					proj->move(proj->getVelocity().x * dt, proj->getVelocity().y * dt);
 					if (!proj->isInWindow(m_window)) {
 						proj = tower.getProjectiles().erase(proj);
@@ -198,6 +197,8 @@ void Game::update(float dt)
 			}
 			i++;
 		}
+
+		oncePerTower = false;
 
 		if (armorErased) continue;
 
