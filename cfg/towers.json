@@ -13,7 +13,7 @@
       }
     ],
     "muzzlePos": [ 77, 46 ],
-    "radius": 300.0,
+    "range": 300.0,
     "fireRate": 30.0,
     "baseCost": 100
   },
@@ -31,7 +31,7 @@
       }
     ],
     "muzzlePos": [ 199, 62 ],
-    "radius": 500.0,
+    "range": 500.0,
     "fireRate": 20.0,
     "baseCost": 200
   },
@@ -49,7 +49,7 @@
       }
     ],
     "muzzlePos": [ 49, 1 ],
-    "radius": 500.0,
+    "range": 500.0,
     "fireRate": 50.0,
     "baseCost": 300
   }

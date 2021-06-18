@@ -151,8 +151,8 @@ void Game::update(float dt)
 				break;
 			}
 
-			// Check if the armor is inside the tower's radius
-			if (!towerTargets[i] && Collision::isInRadius(*armor, tower)) {
+			// Check if the armor is in range of the tower
+			if (!towerTargets[i] && Collision::isInRange(*armor, tower)) {
 				// Aim the tower at the armor
 				tower.aim(armor->getPosition());
 				towerTargets[i] = true;
@@ -427,8 +427,8 @@ void Game::setDebug(Tower& tower)
 	debugRect.setPosition(tower.getPosition());
 
 	// DEBUG CIRCLE
-	debugCircle.setRadius(tower.getRadius());
-	debugCircle.setOrigin(tower.getRadius(), tower.getRadius());
+	debugCircle.setRadius(tower.getRange());
+	debugCircle.setOrigin(tower.getRange(), tower.getRange());
 	debugCircle.setOutlineThickness(1.f);
 	debugCircle.setOutlineColor(sf::Color::White);
 	debugCircle.setFillColor(sf::Color::Transparent);

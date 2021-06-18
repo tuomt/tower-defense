@@ -12,7 +12,7 @@ class Tower : public sf::Sprite
 private:
 	const json& m_attributes;
 	TextureManager& m_textureManager;
-	float m_radius = 100.f;
+	float m_range = 100.f;
 	float m_fireRate = 30.f;
 	float m_reloadTime = 0.f;
 	float m_secondsFromLastShot = 0.f;
@@ -22,7 +22,7 @@ private:
 public:
 	Tower(const json& attributes, TextureManager& textureManager);
 
-	float getRadius() const;
+	float getRange() const;
 	float getFireRate() const;
 	float getReloadTime() const;
 	const sf::Vector2f getMuzzlePosition(bool transform = true) const;
@@ -30,7 +30,7 @@ public:
 	bool isReloading() const;
 
 	void aim(const sf::Vector2f& target);
-	void setRadius(float radius);
+	void setRange(float range);
 	void setFireRate(float fireRate);
 	void setReloadTime(float reloadTime);
 	void setMuzzlePosition(const sf::Vector2f& position);

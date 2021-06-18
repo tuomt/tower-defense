@@ -74,11 +74,11 @@ void Shop::selectItem(Item* item)
 
 	auto id = item->getId();
 	// Update description
-	float radius = m_towerAttributes[id]["radius"];
+	float range = m_towerAttributes[id]["range"];
 	unsigned int damage = m_towerAttributes[id]["projectiles"][0]["damage"];
 	float fireRate = m_towerAttributes[id]["fireRate"];
 	unsigned int cost = m_items[id].getCost();
-	m_description[0].setString("Radius: " + std::to_string(radius));
+	m_description[0].setString("Range: " + std::to_string(range));
 	m_description[1].setString("Damage: " + std::to_string(damage));
 	m_description[2].setString("Fire rate: " + std::to_string(fireRate));
 	m_description[3].setString("Cost: " + std::to_string(cost));

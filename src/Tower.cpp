@@ -17,13 +17,13 @@ Tower::Tower(const json& attributes, TextureManager& textureManager)
 		setTextureRect(textureRect);
 	}
 	setMuzzlePosition(sf::Vector2f(attributes["muzzlePos"][0], attributes["muzzlePos"][1]));
-	setRadius(attributes["radius"]);
+	setRange(attributes["range"]);
 	setFireRate(attributes["fireRate"]);
 }
 
-float Tower::getRadius() const
+float Tower::getRange() const
 {
-	return m_radius;
+	return m_range;
 }
 
 
@@ -74,9 +74,9 @@ void Tower::fire()
 	m_projectiles.push_back(p);
 }
 
-void Tower::setRadius(float radius)
+void Tower::setRange(float range)
 {
-	m_radius = radius;
+	m_range = range;
 }
 
 void Tower::setFireRate(float fireRate)
