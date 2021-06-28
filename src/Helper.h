@@ -18,6 +18,7 @@ namespace Helper {
 	float getAngle(sf::Vector2f vector);
 	float getAngle(sf::Vector2f p1, sf::Vector2f p2);
 	float radToDeg(float radians);
+	float degToRad(float degrees);
 	sf::Vector2f getPerimeterPoint(sf::Vector2f center, float radius, float angle);
 	sf::Vector2f normalize(const sf::Vector2f& vector);
 }

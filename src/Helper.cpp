@@ -37,6 +37,12 @@ float Helper::radToDeg(float radians) {
 	return radians * 180 / pi;
 }
 
+float Helper::degToRad(float degrees)
+{
+	const float pi = 3.14159265f;
+	return degrees * pi / 180;
+}
+
 sf::Vector2f Helper::getPerimeterPoint(sf::Vector2f center, float radius, float angle) {
 	float y = sin(angle) * radius;
 	float x = cos(angle) * radius;
