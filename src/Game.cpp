@@ -63,6 +63,9 @@ void Game::handleInput(sf::Event& event, float dt)
 				fillArmorQueue();
 			}
 		}
+		else if (event.key.code == sf::Keyboard::P) {
+			m_pause ? m_pause = false : m_pause = true;
+		}
 	}
 	else if (event.type == sf::Event::MouseMoved) {
 		auto& mousePos = getMousePos();
@@ -91,6 +94,7 @@ void Game::handleInput(sf::Event& event, float dt)
 					if (selectedItem && getMoney() >= selectedItem->getCost()) {
 						m_selectedItem = selectedItem;
 						startPlacingItem();
+						setDebug(m_towers.back());
 					}
 				}
 				m_leftMouse = MouseState::PRESSED;
@@ -121,6 +125,8 @@ void Game::handleInput(sf::Event& event, float dt)
 
 void Game::update(float dt)
 {
+	if (m_pause) return;
+
 	if (m_round.isInProgress()) {
 		m_timeSinceSpawn += dt;
 
@@ -151,16 +157,23 @@ void Game::update(float dt)
 				break;
 			}
 
-			// Check if the armor is in range of the tower
-			if (!towerTargets[i] && Collision::isInRange(*armor, tower)) {
+			if (tower.isReloading()) {
+				tower.reload(dt);
+			}
+
+			// Check if the armor is inside the tower's FOV
+			if (!towerTargets[i] && tower.isInFOV(*armor)) {
+
+				auto dist = getDistance(tower.getPosition(), armor->getPosition());
+				debugAim.setSize(sf::Vector2f(dist, debugAim.getSize().y));
+				debugAim.setPosition(tower.getPosition());
+				debugAim.setRotation(tower.getRotation());
+
 				// Aim the tower at the armor
 				tower.aim(armor->getPosition());
 				towerTargets[i] = true;
 
-				if (tower.isReloading()) {
-					tower.reload(dt);
-				}
-				else {
+				if (!tower.isReloading()) {
 					tower.fire();
 				}
 			}
@@ -262,6 +275,10 @@ void Game::draw()
 	m_window.draw(debugCircle);
 	m_window.draw(debugMuzzle);
 	m_window.draw(debugText);
+	m_window.draw(debugTraverseCenter);
+	m_window.draw(debugTraverseLeft);
+	m_window.draw(debugTraverseRight);
+	m_window.draw(debugAim);
 }
 
 bool Game::isReadyToSpawn() {
@@ -404,7 +421,6 @@ void Game::startPlacingItem()
 	tower.setPosition(getMousePos());
 	tower.setScale(0.5f, 0.5f);
 	m_towers.push_back(tower);
-	setDebug(tower);
 }
 
 void Game::placeSelectedItem()
@@ -427,6 +443,7 @@ void Game::setDebug(Tower& tower)
 	debugRect.setPosition(tower.getPosition());
 
 	// DEBUG CIRCLE
+	debugCircle.setPointCount(250);
 	debugCircle.setRadius(tower.getRange());
 	debugCircle.setOrigin(tower.getRange(), tower.getRange());
 	debugCircle.setOutlineThickness(1.f);
@@ -438,6 +455,22 @@ void Game::setDebug(Tower& tower)
 	debugMuzzle.setRadius(2.f);
 	debugMuzzle.setOrigin(debugMuzzle.getRadius(), debugMuzzle.getRadius());
 	debugMuzzle.setPosition(tower.getMuzzlePosition());
+
+	// DEBUG FIELD OF VIEW
+	debugTraverseLeft.setFillColor(sf::Color::Red);
+	debugTraverseLeft.setPosition(tower.getPosition());
+	debugTraverseLeft.setSize(sf::Vector2f(tower.getRange(), 1.f));
+	debugTraverseLeft.setOrigin(sf::Vector2f(0.f, 0.f));
+	debugTraverseLeft.setRotation(tower.getBaseDirection() - tower.getTraverse() / 2.f);
+
+	debugTraverseRight.setFillColor(sf::Color::Red);
+	debugTraverseRight.setPosition(tower.getPosition());
+	debugTraverseRight.setSize(sf::Vector2f(tower.getRange(), 1.f));
+	debugTraverseRight.setOrigin(sf::Vector2f(0.f, 0.f));
+	debugTraverseRight.setRotation(tower.getBaseDirection() + tower.getTraverse() / 2.f);
+
+	debugAim.setFillColor(sf::Color::Cyan);
+	debugAim.setSize(sf::Vector2f(1.f, 1.f));
 }
 
 void Game::updateDebug(Tower& tower)
@@ -445,5 +478,8 @@ void Game::updateDebug(Tower& tower)
 	debugRect.setPosition(tower.getPosition());
 	debugCircle.setPosition(tower.getPosition());
 	debugMuzzle.setPosition(tower.getMuzzlePosition());
+	debugTraverseCenter.setPosition(tower.getPosition());
+	debugTraverseLeft.setPosition(tower.getPosition());
+	debugTraverseRight.setPosition(tower.getPosition());
 }
 

@@ -18,6 +18,7 @@ Tower::Tower(const json& attributes, TextureManager& textureManager)
 	}
 	setMuzzlePosition(sf::Vector2f(attributes["muzzlePos"][0], attributes["muzzlePos"][1]));
 	setRange(attributes["range"]);
+	setTraverse(attributes["traverse"]);
 	setFireRate(attributes["fireRate"]);
 }
 
@@ -26,6 +27,15 @@ float Tower::getRange() const
 	return m_range;
 }
 
+float Tower::getTraverse() const
+{
+	return m_traverse;
+}
+
+float Tower::getBaseDirection() const
+{
+	return m_baseDirection;
+}
 
 float Tower::getFireRate() const
 {
@@ -55,6 +65,43 @@ bool Tower::isReloading() const
 	return m_reloadTime > 0.f;
 }
 
+bool Tower::isInFOV(const Armor& armor) const
+{
+	float distance = getDistance(getPosition(), armor.getPosition());
+
+	if (abs(distance) > getRange()) {
+		return false;
+	} else if (getTraverse() < 360.f) {
+		sf::Vector2f aimVector;
+		aimVector.x = armor.getPosition().x - getPosition().x;
+		aimVector.y = armor.getPosition().y - getPosition().y;
+
+		float angle = radToDeg(getAngle(aimVector));
+
+		if (angle < 0.f) {
+			angle += 360.f;
+		}
+
+		if (getBaseDirection() > angle) {
+			angle = getBaseDirection() - angle;
+		}
+		else {
+			angle = angle - getBaseDirection();
+		}
+
+		if (angle > 180.f) {
+			angle = 360.f - angle;
+		}
+
+		float halfFOV = getTraverse() / 2.f;
+		if (angle > halfFOV) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void Tower::fire()
 {
 	// Set reload time
@@ -77,6 +124,16 @@ void Tower::fire()
 void Tower::setRange(float range)
 {
 	m_range = range;
+}
+
+void Tower::setTraverse(float traverse)
+{
+	m_traverse = traverse;
+}
+
+void Tower::setBaseDirection(float baseDir)
+{
+	m_baseDirection = baseDir;
 }
 
 void Tower::setFireRate(float fireRate)

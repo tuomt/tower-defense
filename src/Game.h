@@ -51,8 +51,14 @@ private:
 	void loadMap(std::string mapName);
 	void loadTextures();
 
+	bool m_pause = false;
+
 	// DEBUG STUFF
 	sf::RectangleShape debugRect;
+	sf::RectangleShape debugTraverseCenter;
+	sf::RectangleShape debugTraverseLeft;
+	sf::RectangleShape debugTraverseRight;
+	sf::RectangleShape debugAim;
 	sf::CircleShape debugCircle;
 	sf::CircleShape debugMuzzle; // debug muzzle position
 	sf::Text debugText;
