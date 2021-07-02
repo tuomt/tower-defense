@@ -52,6 +52,7 @@ private:
 	void loadTextures();
 
 	bool m_pause = false;
+	bool m_rotating = false;
 
 	// DEBUG STUFF
 	sf::RectangleShape debugRect;

@@ -66,11 +66,34 @@ void Game::handleInput(sf::Event& event, float dt)
 		else if (event.key.code == sf::Keyboard::P) {
 			m_pause ? m_pause = false : m_pause = true;
 		}
+		else if (event.key.code == sf::Keyboard::R) {
+			if (m_selectedItem) {
+				m_rotating = true;
+				m_window.setMouseCursorVisible(false);
+			}
+		}
+	}
+	else if (event.type == sf::Event::KeyReleased) {
+		if (event.key.code == sf::Keyboard::R) {
+			m_rotating = false;
+			if (m_selectedItem) {
+				sf::Mouse::setPosition((sf::Vector2i)m_towers.back().getPosition(), m_window);
+			}
+			m_window.setMouseCursorVisible(true);
+		}
 	}
 	else if (event.type == sf::Event::MouseMoved) {
 		auto& mousePos = getMousePos();
 		if (m_selectedItem) {
-			m_towers.back().setPosition(mousePos);
+			if (m_rotating) {
+				float angle = radToDeg(getAngle(mousePos, m_towers.back().getPosition()));
+				m_towers.back().setRotation(angle);
+				m_towers.back().setBaseDirection(m_towers.back().getRotation());
+				updateDebug(m_towers.back());
+			}
+			else {
+				m_towers.back().setPosition(mousePos);
+			}
 		}
 		auto item = m_shop.isMouseOnItem(mousePos);
 
@@ -87,6 +110,7 @@ void Game::handleInput(sf::Event& event, float dt)
 			if (m_leftMouse == MouseState::RELEASED) {
 				if (m_selectedItem) {
 					placeSelectedItem();
+					setDebug(m_towers.back());
 				}
 				else {
 					Shop::Item* selectedItem = m_shop.getSelectedItem();
@@ -480,6 +504,8 @@ void Game::updateDebug(Tower& tower)
 	debugMuzzle.setPosition(tower.getMuzzlePosition());
 	debugTraverseCenter.setPosition(tower.getPosition());
 	debugTraverseLeft.setPosition(tower.getPosition());
+	debugTraverseLeft.setRotation(tower.getBaseDirection() - tower.getTraverse() / 2.f);
 	debugTraverseRight.setPosition(tower.getPosition());
+	debugTraverseRight.setRotation(tower.getBaseDirection() + tower.getTraverse() / 2.f);
 }
 
