@@ -8,12 +8,13 @@
       {
         "name": "bazooka_rocket",
         "texture": "rocket.png",
-        "damage": 100,
-        "speed": 300
+        "damage": 100.0,
+        "speed": 300.0
       }
     ],
     "muzzlePos": [ 77, 46 ],
     "range": 300.0,
+    "traverse": 360.0,
     "fireRate": 30.0,
     "baseCost": 100
   },
@@ -26,12 +27,13 @@
       {
         "name": "bazooka_rocket",
         "texture": "rocket.png",
-        "damage": 275,
-        "speed": 800
+        "damage": 75.0,
+        "speed": 1500.0
       }
     ],
     "muzzlePos": [ 199, 62 ],
-    "range": 500.0,
+    "range": 900.0,
+    "traverse": 40.0,
     "fireRate": 20.0,
     "baseCost": 200
   },
@@ -44,12 +46,13 @@
       {
         "name": "bazooka_rocket",
         "texture": "rocket.png",
-        "damage": 333,
-        "speed": 300
+        "damage": 333.0,
+        "speed": 300.0
       }
     ],
     "muzzlePos": [ 49, 1 ],
     "range": 500.0,
+    "traverse": 360.0,
     "fireRate": 50.0,
     "baseCost": 300
   }
