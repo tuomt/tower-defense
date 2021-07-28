@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Projectile.h"
-#include "TextureManager.h"
 #include "nlohmann/json.hpp"
 #include <list>
 #include "Armor.h"
@@ -12,7 +11,6 @@ class Tower : public sf::Sprite
 {
 private:
 	const json& m_attributes;
-	TextureManager& m_textureManager;
 	float m_range = 100.f;
 	float m_traverse = 360.f;
 	float m_baseDirection = 0.f;
@@ -22,7 +20,7 @@ private:
 	sf::Vector2f m_muzzlePosition = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f m_target = sf::Vector2f(0.f, 0.f);
 public:
-	Tower(const json& attributes, TextureManager& textureManager);
+	Tower(const json& attributes);
 	std::list<Projectile> m_projectiles;
 
 	float getRange() const;

@@ -7,9 +7,11 @@ void Armor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_healthBar, states);
 }
 
-Armor::Armor(const json& attributes, TextureManager& textureManager, std::vector<sf::Vector2f>& waypoints)
-	: m_attributes(attributes), m_textureManager(textureManager), m_waypoints(waypoints)
+Armor::Armor(const json& attributes, std::vector<sf::Vector2f>& waypoints)
+	: m_attributes(attributes), m_waypoints(waypoints)
 {
+	auto& textureManager = TextureManager::getInstance();
+
 	m_sprite.setTexture(textureManager.getTexture(attributes["name"]));
 	if (!attributes["textureRect"].is_null()) {
 		sf::IntRect textureRect;

@@ -10,7 +10,6 @@ class Armor : public sf::Drawable
 {
 private:
 	const json& m_attributes;
-	TextureManager& m_textureManager;
 	float m_health = 0.f;
 	float m_speed = 0.f;
 	unsigned int m_destroyReward = 0;
@@ -21,7 +20,7 @@ private:
 	sf::Sprite m_sprite;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 public:
-	Armor(const json& attributes, TextureManager& textureManager, std::vector<sf::Vector2f>& waypoints);
+	Armor(const json& attributes, std::vector<sf::Vector2f>& waypoints);
 
 	void setOrigin(float x, float y);
 	void setOrigin(const sf::Vector2f& origin);

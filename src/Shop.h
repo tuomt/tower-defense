@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "nlohmann/json.hpp"
-#include "TextureManager.h"
 
 using json = nlohmann::json;
 
@@ -43,7 +42,7 @@ public:
 
 	Shop(const json& towerAttributes, sf::Font& font, unsigned long& money);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void init(TextureManager& textureManager, const sf::RenderWindow& window);
+	void init(const sf::RenderWindow& window);
 	Item* isMouseOnItem(sf::Vector2f mousePos);
 	void selectItem(Item* item);
 	void clearSelection();

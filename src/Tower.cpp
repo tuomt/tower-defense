@@ -1,13 +1,14 @@
 #include <iostream>
 #include "Tower.h"
 #include "Helper.h"
+#include "TextureManager.h"
 
 using namespace Helper;
 
-Tower::Tower(const json& attributes, TextureManager& textureManager)
-	: m_attributes(attributes), m_textureManager(textureManager)
+Tower::Tower(const json& attributes)
+	: m_attributes(attributes)
 {
-	setTexture(textureManager.getTexture(attributes["name"]));
+	setTexture(TextureManager::getInstance().getTexture(attributes["name"]));
 	if (!attributes["textureRect"].is_null()) {
 		sf::IntRect textureRect;
 		textureRect.left = attributes["textureRect"][0];
@@ -102,8 +103,8 @@ void Tower::fire()
 	// Set reload time
 	m_reloadTime = 60.f / getFireRate();
 	// Create a projectile
-	Projectile p(m_attributes["projectiles"][0], m_textureManager);
-	p.setTexture(m_textureManager.getTexture(m_attributes["projectiles"][0]["name"]));
+	Projectile p(m_attributes["projectiles"][0]);
+	p.setTexture(TextureManager::getInstance().getTexture(m_attributes["projectiles"][0]["name"]));
 	p.setSpeed(m_attributes["projectiles"][0]["speed"]);
 	p.setOrigin(p.getGlobalBounds().width / 2.f, p.getGlobalBounds().height / 2.f);
 	p.setRotation(getRotation());

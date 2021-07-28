@@ -1,8 +1,9 @@
 #include "Projectile.h"
+#include "TextureManager.h"
 
-Projectile::Projectile(const json& attributes, TextureManager& textureManager)
+Projectile::Projectile(const json& attributes)
 {
-	setTexture(textureManager.getTexture(attributes["name"]));
+	setTexture(TextureManager::getInstance().getTexture(attributes["name"]));
 	setDamage(attributes["damage"]);
 	setSpeed(attributes["speed"]);
 }

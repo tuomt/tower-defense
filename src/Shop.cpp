@@ -1,4 +1,5 @@
 #include "Shop.h"
+#include "TextureManager.h"
 
 Shop::Shop(const json& towerAttributes, sf::Font& font, unsigned long& money)
 	: m_towerAttributes(towerAttributes), m_font(font), m_money(money)
@@ -9,10 +10,11 @@ Shop::Shop(const json& towerAttributes, sf::Font& font, unsigned long& money)
 	}
 }
 
-void Shop::init(TextureManager& texManager, const sf::RenderWindow& window)
+void Shop::init(const sf::RenderWindow& window)
 {
+	auto& textureManager = TextureManager::getInstance();
 	// Bar
-	m_bar.setTexture(texManager.getTexture("shop_bar"));
+	m_bar.setTexture(TextureManager::getInstance().getTexture("shop_bar"));
 	m_bar.setPosition(0, window.getSize().y - m_bar.getTextureRect().height);
 
 	// Items
@@ -25,8 +27,8 @@ void Shop::init(TextureManager& texManager, const sf::RenderWindow& window)
 		std::string name = m_towerAttributes[i]["name"];
 
 		// Set textures for the item
-		item.getSprite().setTexture(texManager.getTexture(name));
-		item.getBackground().setTexture(texManager.getTexture("shop_item_background"));
+		item.getSprite().setTexture(textureManager.getTexture(name));
+		item.getBackground().setTexture(textureManager.getTexture("shop_item_background"));
 		
 		// Scale the item
 		float scale = m_towerAttributes[i]["shopScale"];

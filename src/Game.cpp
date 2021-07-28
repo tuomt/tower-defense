@@ -32,13 +32,15 @@ Game::Game(sf::RenderWindow& window)
 	m_moneyText.setOutlineColor(sf::Color::Black);
 	m_moneyText.setOutlineThickness(1.f);
 
+
 	// Load map and textures
+	auto& textureManager = TextureManager::getInstance();
 	loadMap("level_1");
 	//loadAttributes(); // Must be loaded before textures
 	loadTextures();
-	m_mapSprite.setTexture(m_textureManager.getTexture("background"));
+	m_mapSprite.setTexture(textureManager.getTexture("background"));
 	//m_shop.setAttributes(m_towerAttributes);
-	m_shop.init(m_textureManager, m_window);
+	m_shop.init(m_window);
 
 	setMoney(250);
 
@@ -369,7 +371,7 @@ void Game::spawnNextArmor() {
 	std::size_t index = m_armorQueue.front();
 	m_armorQueue.pop();
 
-	Armor armor(m_armorAttributes[index], m_textureManager, m_waypoints);
+	Armor armor(m_armorAttributes[index], m_waypoints);
 	armor.setOrigin(armor.getGlobalBounds().width / 2.f, armor.getGlobalBounds().height / 2.f);
 	armor.setPosition(m_waypoints[0]);
 	armor.selectNextWaypoint();
@@ -416,31 +418,32 @@ void Game::loadMap(std::string mapName)
 
 void Game::loadTextures()
 {
+	auto& textureManager = TextureManager::getInstance();
 	std::cout << "loadTextures()\n";
-	m_textureManager.loadTexture("background", "level_1.png");
-	m_textureManager.loadTexture("shop_bar", "shop_bar.png");
-	m_textureManager.loadTexture("shop_item_background", "shop_item_background.png");
-	m_textureManager.loadTexture("buy_button", "buy_button.png");
+	textureManager.loadTexture("background", "level_1.png");
+	textureManager.loadTexture("shop_bar", "shop_bar.png");
+	textureManager.loadTexture("shop_item_background", "shop_item_background.png");
+	textureManager.loadTexture("buy_button", "buy_button.png");
 
 	for (auto& tower : m_towerAttributes) {
 		std::cout << "Loading texture: " << tower["texture"] << std::endl;
-		m_textureManager.loadTexture(tower["name"], tower["texture"]);
+		textureManager.loadTexture(tower["name"], tower["texture"]);
 		for (auto& projectile : tower["projectiles"]) {
-			m_textureManager.loadTexture(projectile["name"], projectile["texture"]);
-			m_textureManager.getTexture(projectile["name"]).setSmooth(true);
+			textureManager.loadTexture(projectile["name"], projectile["texture"]);
+			textureManager.getTexture(projectile["name"]).setSmooth(true);
 		}
-		m_textureManager.getTexture(tower["name"]).setSmooth(true);
+		textureManager.getTexture(tower["name"]).setSmooth(true);
 	}
 
 	for (auto& armor : m_armorAttributes) {
-		m_textureManager.loadTexture(armor["name"], armor["texture"]);
-		m_textureManager.getTexture(armor["name"]).setSmooth(true);
+		textureManager.loadTexture(armor["name"], armor["texture"]);
+		textureManager.getTexture(armor["name"]).setSmooth(true);
 	}
 }
 
 void Game::startPlacingItem()
 {
-	Tower tower(m_towerAttributes[m_selectedItem->getId()], m_textureManager);
+	Tower tower(m_towerAttributes[m_selectedItem->getId()]);
 	tower.setOrigin(tower.getGlobalBounds().width / 2.f, tower.getGlobalBounds().height / 2.f);
 	tower.setPosition(getMousePos());
 	tower.setScale(0.5f, 0.5f);

@@ -27,7 +27,6 @@ private:
 	enum class MouseState { RELEASED, PRESSED };
 	MouseState m_leftMouse = MouseState::RELEASED;
 	MouseState m_rightMouse = MouseState::RELEASED;
-	TextureManager m_textureManager;
 	Round m_round;
 	float m_timeSinceSpawn = 0.f;
 	float m_spawnDelay = 3.f;

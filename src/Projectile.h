@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "TextureManager.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -12,7 +11,7 @@ private:
 	float m_speed = 0.f;
 	sf::Vector2f m_velocity = sf::Vector2f(0.f, 0.f);
 public:
-	Projectile(const json& attributes, TextureManager& textureManager);
+	Projectile(const json& attributes);
 
 	float getDamage() const;
 	float getSpeed() const;
