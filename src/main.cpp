@@ -37,7 +37,7 @@ int main()
 		sceneManager.currentScene->update(dt);
 
 		window.clear();
-		sceneManager.currentScene->draw();
+		window.draw(*sceneManager.currentScene);
 		window.display();
 	}
 

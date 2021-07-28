@@ -267,7 +267,8 @@ void MapEditor::update(float dt)
 {
 }
 
-void MapEditor::draw() {
+void MapEditor::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
 	m_window.draw(mapSprite);
 
 	for (auto& area : restrictedAreas) {

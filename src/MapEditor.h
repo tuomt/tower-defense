@@ -13,7 +13,7 @@ public:
 		std::string name;
 		std::vector<Waypoint>* waypoints;
 	};
-	void draw();
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void handleInput(sf::Event& event, float dt);
 	void update(float dt);
 	void saveMap(MapData mapData);

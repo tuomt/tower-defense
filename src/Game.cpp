@@ -275,7 +275,7 @@ void Game::update(float dt)
 	debugText.setString(s);
 }
 
-void Game::draw()
+void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	m_window.draw(m_mapSprite);
 	m_window.draw(m_shop);
