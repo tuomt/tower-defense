@@ -1,6 +1,6 @@
+#include <iostream>
 #include "Tower.h"
 #include "Helper.h"
-#include <iostream>
 
 using namespace Helper;
 
@@ -53,11 +53,6 @@ const sf::Vector2f Tower::getMuzzlePosition(bool transform) const
 		return getTransform().transformPoint(m_muzzlePosition);
 	}
 	else return m_muzzlePosition;
-}
-
-std::list<Projectile>& Tower::getProjectiles()
-{
-	return m_projectiles;
 }
 
 bool Tower::isReloading() const

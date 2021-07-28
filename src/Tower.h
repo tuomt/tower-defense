@@ -21,9 +21,9 @@ private:
 	float m_secondsFromLastShot = 0.f;
 	sf::Vector2f m_muzzlePosition = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f m_target = sf::Vector2f(0.f, 0.f);
-	std::list<Projectile> m_projectiles;
 public:
 	Tower(const json& attributes, TextureManager& textureManager);
+	std::list<Projectile> m_projectiles;
 
 	float getRange() const;
 	float getTraverse() const;
@@ -31,7 +31,6 @@ public:
 	float getFireRate() const;
 	float getReloadTime() const;
 	const sf::Vector2f getMuzzlePosition(bool transform = true) const;
-	std::list<Projectile>& getProjectiles();
 	bool isReloading() const;
 	bool isInFOV(const Armor& armor) const;
 

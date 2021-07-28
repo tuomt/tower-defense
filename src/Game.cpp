@@ -64,7 +64,7 @@ void Game::handleInput(sf::Event& event, float dt)
 			}
 		}
 		else if (event.key.code == sf::Keyboard::P) {
-			m_pause ? m_pause = false : m_pause = true;
+			m_pause = !m_pause;
 		}
 		else if (event.key.code == sf::Keyboard::R) {
 			if (m_selectedItem) {
@@ -203,20 +203,20 @@ void Game::update(float dt)
 			}
 
 			// Check if any of the tower's projectiles collide with the armor
-			auto proj = tower.getProjectiles().begin();
-			while (proj != tower.getProjectiles().end()) {
+			auto proj = tower.m_projectiles.begin();
+			while (proj != tower.m_projectiles.end()) {
 
 				if (oncePerTower) {
 					proj->move(proj->getVelocity().x * dt, proj->getVelocity().y * dt);
 					if (!proj->isInWindow(m_window)) {
-						proj = tower.getProjectiles().erase(proj);
+						proj = tower.m_projectiles.erase(proj);
 						continue;
 					}
 				}
 
 				if (Collision::collides(*armor, *proj)) {
 					armor->setHealth(armor->getHealth() - proj->getDamage());
-					proj = tower.getProjectiles().erase(proj);
+					proj = tower.m_projectiles.erase(proj);
 				}
 				else {
 					++proj;
@@ -241,7 +241,7 @@ void Game::update(float dt)
 			if (m_armors.empty() && m_armorQueue.empty()) {
 				// Remove all projectiles when there's no armors left
 				for (auto& tower : m_towers) {
-					tower.getProjectiles().clear();
+					tower.m_projectiles.clear();
 				}
 				break;
 			}
@@ -287,7 +287,7 @@ void Game::draw()
 	m_window.draw(debugRect);
 	for (auto& tower : m_towers) {
 		m_window.draw(tower);
-		for (auto& p : tower.getProjectiles()) {
+		for (auto& p : tower.m_projectiles) {
 			m_window.draw(p);
 		}
 	}
