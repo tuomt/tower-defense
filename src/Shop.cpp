@@ -34,9 +34,9 @@ void Shop::init(const sf::RenderWindow& window)
 		float scale = m_towerAttributes[i]["shopScale"];
 		item.getSprite().scale(scale, scale);
 
-        // Set origin of the item's image sprite
-        auto spriteRect = item.getSprite().getTextureRect();
-        item.getSprite().setOrigin(sf::Vector2f(spriteRect.width / 2.f, spriteRect.height / 2.f));
+		// Set origin of the item's image sprite
+		auto spriteRect = item.getSprite().getTextureRect();
+		item.getSprite().setOrigin(sf::Vector2f(spriteRect.width / 2.f, spriteRect.height / 2.f));
 
 		// Set position of the item
 		auto bgRect = item.getBackground().getTextureRect();

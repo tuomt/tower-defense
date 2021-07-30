@@ -5,7 +5,7 @@
 class SceneManager
 {
 public:
-    std::unique_ptr<Scene> currentScene;
+	std::unique_ptr<Scene> currentScene;
 
 	static SceneManager& getInstance() {
 		static SceneManager instance;
