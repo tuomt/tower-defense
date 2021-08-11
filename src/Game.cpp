@@ -35,9 +35,9 @@ Game::Game(sf::RenderWindow& window)
 
 	// Load map and textures
 	auto& textureManager = TextureManager::getInstance();
+	loadTextures();
 	loadMap("level_2");
 	//loadAttributes(); // Must be loaded before textures
-	loadTextures();
 	m_mapSprite.setTexture(textureManager.getTexture("background"));
 	//m_shop.setAttributes(m_towerAttributes);
 	m_shop.init(m_window);
@@ -413,6 +413,8 @@ void Game::loadAttributes()
 
 void Game::loadMap(std::string mapName)
 {
+	auto& textureManager = TextureManager::getInstance();
+
 	std::ifstream mapFile("../cfg/maps/" + mapName + ".json");
 	json map;
 	mapFile >> map;
@@ -421,6 +423,19 @@ void Game::loadMap(std::string mapName)
 	}
 
 	for (auto& area : map["restrictedAreas"]) {
+		sf::Sprite ra;
+		ra.setTexture(textureManager.getTexture("restricted_area"));
+		sf::Vector2f size(area["size"]["x"], area["size"]["y"]);
+		sf::IntRect textureRect;
+		textureRect.width = size.x;
+		textureRect.height = size.y;
+		ra.setTextureRect(textureRect);
+		ra.setOrigin(sf::Vector2f(area["origin"]["x"], area["origin"]["y"]));
+		ra.setPosition(sf::Vector2f(area["position"]["x"], area["position"]["y"]));
+		ra.setRotation(area["rotation"]);
+		m_restrictedAreas.push_back(ra);
+
+		/*
 		sf::RectangleShape rect;
 		rect.setFillColor(sf::Color::Transparent);
 		rect.setOutlineColor(sf::Color::Red);
@@ -430,6 +445,7 @@ void Game::loadMap(std::string mapName)
 		rect.setPosition(sf::Vector2f(area["position"]["x"], area["position"]["y"]));
 		rect.setRotation(area["rotation"]);
 		m_restrictedAreas.push_back(rect);
+		*/
 	}
 }
 
@@ -438,6 +454,9 @@ void Game::loadTextures()
 	auto& textureManager = TextureManager::getInstance();
 	std::cout << "loadTextures()\n";
 	textureManager.loadTexture("background", "level_1.png");
+	textureManager.loadTexture("restricted_area", "restricted_area.png");
+	textureManager.getTexture("restricted_area").setRepeated(true);
+	textureManager.getTexture("restricted_area").setSmooth(true);
 	textureManager.loadTexture("shop_bar", "shop_bar.png");
 	textureManager.loadTexture("shop_item_background", "shop_item_background.png");
 	textureManager.loadTexture("buy_button", "buy_button.png");

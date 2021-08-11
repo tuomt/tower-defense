@@ -43,7 +43,7 @@ private:
 	std::list<Armor> m_armors;
 	std::list<Tower> m_towers;
 	std::vector<sf::Vector2f> m_waypoints;
-	std::vector<sf::RectangleShape> m_restrictedAreas;
+	std::vector<sf::Sprite> m_restrictedAreas;
 	sf::Sprite m_mapSprite;
 
 	void loadAttributes();

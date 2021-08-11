@@ -1,5 +1,8 @@
 #include "CollisionHandler.h"
 #include "Helper.h"
+#include "Collision.h"
+
+using namespace Collision;
 
 bool CollisionHandler::collides(const Armor& armor, const Projectile& projectile)
 {
@@ -13,9 +16,7 @@ bool CollisionHandler::collides(sf::Vector2f circle1, sf::Vector2f circle2, floa
 }
 
 
-bool CollisionHandler::collides(const Tower& tower, const sf::RectangleShape& rect)
+bool CollisionHandler::collides(const Tower& tower, const sf::Sprite& rect)
 {
-	auto towerBounds = tower.getGlobalBounds();
-	auto rectBounds = rect.getGlobalBounds();
-	return towerBounds.intersects(rectBounds);
+	return BoundingBoxTest(tower, rect);
 }
