@@ -7,7 +7,7 @@
 #include <thread>
 #include <iomanip>
 #include "Helper.h"
-#include "Collision.h"
+#include "CollisionHandler.h"
 #include "nlohmann/json.hpp"
 
 using namespace Helper;
@@ -285,7 +285,7 @@ void MapEditor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		auto point2 = selectedComponent->getPosition();
 		float radius = 25.f;
 
-		if (!Collision::collides(point1, point2, radius, radius)) {
+		if (!CollisionHandler::collides(point1, point2, radius, radius)) {
 			float angle = getAngle(point2, point1);
 			point1 = getPerimeterPoint(point1, 25.f, angle);
 			point2 = getPerimeterPoint(point2, -25.f, angle);

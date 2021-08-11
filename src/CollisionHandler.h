@@ -3,10 +3,10 @@
 #include "Projectile.h"
 #include "Tower.h"
 
-class Collision
+class CollisionHandler
 {
 public:
 	static bool collides(const Armor& armor, const Projectile& projectile);
 	static bool collides(sf::Vector2f circle1, sf::Vector2f circle2, float r1, float r2);
+	static bool collides(const Tower& tower, const sf::RectangleShape& rect);
 };
-

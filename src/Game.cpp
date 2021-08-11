@@ -4,7 +4,7 @@
 #include "Helper.h"
 #include "TextureManager.h"
 #include <iostream>
-#include "Collision.h"
+#include "CollisionHandler.h"
 
 using namespace Helper;
 
@@ -35,7 +35,7 @@ Game::Game(sf::RenderWindow& window)
 
 	// Load map and textures
 	auto& textureManager = TextureManager::getInstance();
-	loadMap("level_1");
+	loadMap("level_2");
 	//loadAttributes(); // Must be loaded before textures
 	loadTextures();
 	m_mapSprite.setTexture(textureManager.getTexture("background"));
@@ -166,6 +166,22 @@ void Game::update(float dt)
 		}
 	}
 
+	if (m_selectedItem) {
+		for (auto& area : m_restrictedAreas) {
+			if (CollisionHandler::collides(m_towers.back(), area)) {
+				debugRect.setFillColor(sf::Color::Red);
+				debugText.setString("TRUE");
+				debugText.setFillColor(sf::Color::Green);
+				break;
+			}
+			else {
+				debugRect.setFillColor(sf::Color::Green);
+				debugText.setString("FALSE");
+				debugText.setFillColor(sf::Color::Red);
+			}
+		}
+	}
+
 	auto armor = m_armors.begin();
 	bool oncePerTower = true;
 
@@ -216,7 +232,7 @@ void Game::update(float dt)
 					}
 				}
 
-				if (Collision::collides(*armor, *proj)) {
+				if (CollisionHandler::collides(*armor, *proj)) {
 					armor->setHealth(armor->getHealth() - proj->getDamage());
 					proj = tower.m_projectiles.erase(proj);
 				}
@@ -272,9 +288,6 @@ void Game::update(float dt)
 	if (m_towers.size() > 0)
 		updateDebug(m_towers.back());
 
-	std::string s = "(" + std::to_string(getMousePos().x);
-	s += ", " + std::to_string(getMousePos().y) + ")\n";
-	debugText.setString(s);
 }
 
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -297,6 +310,10 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	m_window.draw(m_roundText);
 	m_window.draw(m_moneyText);
 	m_window.draw(m_healthBar);
+
+	for (auto& area : m_restrictedAreas) {
+		m_window.draw(area);
+	}
 
 	m_window.draw(debugCircle);
 	m_window.draw(debugMuzzle);
