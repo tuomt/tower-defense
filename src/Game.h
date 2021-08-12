@@ -5,6 +5,7 @@
 #include "Shop.h"
 #include "Round.h"
 #include "Scene.h"
+#include "Placeable.h"
 #include "Tower.h"
 #include "Armor.h"
 #include "Projectile.h"

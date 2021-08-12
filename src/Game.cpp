@@ -36,7 +36,7 @@ Game::Game(sf::RenderWindow& window)
 	// Load map and textures
 	auto& textureManager = TextureManager::getInstance();
 	loadTextures();
-	loadMap("level_2");
+	loadMap("level_1");
 	//loadAttributes(); // Must be loaded before textures
 	m_mapSprite.setTexture(textureManager.getTexture("background"));
 	//m_shop.setAttributes(m_towerAttributes);

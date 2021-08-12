@@ -16,6 +16,7 @@ add_executable (td src/Armor.cpp
 	src/Helper.cpp 
 	src/main.cpp 
 	src/MapEditor.cpp 
+	src/Placeable.cpp
 	src/Projectile.cpp 
 	src/ResizableComponent.cpp
 	src/Round.cpp
