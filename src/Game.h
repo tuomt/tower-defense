@@ -52,7 +52,38 @@ private:
 	void loadTextures();
 
 	bool m_pause = false;
-	bool m_rotating = false;
+
+	struct Selection {
+		enum class State { Moving, Rotating };
+		State state;
+		Placeable* object;
+		bool canBePlaced = false;
+
+		void activate(Placeable* target)
+		{
+			object = target;
+		}
+
+		void deactivate() 
+		{
+			state = State::Moving;
+			object = nullptr;
+			canBePlaced = false;
+		}
+
+		bool isActive() 
+		{
+			if (object) return true;
+			else return false;
+		}
+	};
+
+	Selection m_selection =
+	{
+		Selection::State::Moving,
+		nullptr,
+		false
+	};
 
 	// DEBUG STUFF
 	sf::RectangleShape debugRect;
@@ -65,6 +96,7 @@ private:
 	sf::Text debugText;
 	void setDebug(Tower& tower);
 	void updateDebug(Tower& tower);
+
 public:
 	Game(sf::RenderWindow& window);
 	virtual void handleInput(sf::Event& event, float dt) override;
