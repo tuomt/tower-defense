@@ -23,7 +23,7 @@ void Shop::init(const sf::RenderWindow& window)
 	auto itemPos = m_bar.getPosition();
 
 	for (auto& tower : m_towerAttributes) {
-		Item item(i);
+		Item item(i, Placeable::Type::Tower);
 		std::string name = m_towerAttributes[i]["name"];
 
 		// Set textures for the item
@@ -161,8 +161,8 @@ void Shop::updateBuyableItems()
 
 // Shop::Item methods
 
-Shop::Item::Item(std::size_t id)
-	: m_id(id)
+Shop::Item::Item(std::size_t id, Placeable::Type type)
+	: m_id(id), m_type(type)
 { }
 
 sf::Sprite& Shop::Item::getBackground()
@@ -178,6 +178,11 @@ sf::Sprite& Shop::Item::getSprite()
 unsigned long Shop::Item::getCost() const
 {
 	return m_cost;
+}
+
+Placeable::Type Shop::Item::getType() const
+{
+	return m_type;
 }
 
 std::size_t Shop::Item::getId() const

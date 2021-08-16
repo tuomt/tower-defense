@@ -6,7 +6,7 @@
 using namespace Helper;
 
 Tower::Tower(const json& attributes)
-	: Placeable(attributes)
+	: Placeable(attributes, Placeable::Type::Tower)
 {
 	setTexture(TextureManager::getInstance().getTexture(attributes["name"]));
 	if (!attributes["textureRect"].is_null()) {

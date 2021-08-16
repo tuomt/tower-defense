@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "nlohmann/json.hpp"
+#include "Placeable.h"
 
 using json = nlohmann::json;
 
@@ -11,14 +12,16 @@ public:
 	{
 	private:
 		unsigned long m_cost = 0;
+		Placeable::Type m_type;
 		std::size_t m_id;
 		sf::Sprite m_background;
 		sf::Sprite m_sprite;
 	public:
-		Item(std::size_t id);
+		Item(std::size_t id, Placeable::Type type);
 		sf::Sprite& getBackground();
 		sf::Sprite& getSprite();
 		unsigned long getCost() const;
+		Placeable::Type getType() const;
 		std::size_t getId() const;
 		void setCost(unsigned long cost);
 		void setPosition(const sf::Vector2f& position);
