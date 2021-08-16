@@ -20,3 +20,8 @@ bool CollisionHandler::collides(const Tower& tower, const sf::Sprite& rect)
 {
 	return BoundingBoxTest(tower, rect);
 }
+
+bool CollisionHandler::collides(const sf::Sprite& s1, const sf::Sprite& s2)
+{
+	return BoundingBoxTest(s1, s2);
+}
