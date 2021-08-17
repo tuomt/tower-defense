@@ -7,7 +7,7 @@ private:
 	unsigned int m_number = 0;
 	bool m_inProgress = false;
 	float m_attackerStrength = 0.0f;
-	enum class Stage { WW2, COLD_WAR, MODERN, FUTURE };
+	enum class Stage { WW2, ColdWar, Modern, Future };
 	Stage m_stage = Stage::WW2;
 public:
 	void start();

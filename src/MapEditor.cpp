@@ -67,21 +67,21 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 		m_window.close();
 	// Mouse movement
 	else if (event.type == sf::Event::MouseMoved) {
-		if (state == MapEditor::State::GENERAL) {
+		if (state == MapEditor::State::General) {
 			if (selectedRestrictedArea != NULL) {
 				sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(m_window);
 				switch (selectionState) {
-				case MapEditor::SelectionState::MOVING:
+				case MapEditor::SelectionState::Moving:
 				{
 					sf::Vector2f offset = mousePos - selectedRestrictedArea->getPosition();
 					auto& pos = selectedRestrictedArea->getPosition();
 					selectedRestrictedArea->setPosition(mousePos - grabOffset);
 					break;
 				}
-				case MapEditor::SelectionState::ROTATING:
+				case MapEditor::SelectionState::Rotating:
 					selectedRestrictedArea->rotateToPoint(mousePos);
 					break;
-				case MapEditor::SelectionState::RESIZING:
+				case MapEditor::SelectionState::Resizing:
 					selectedRestrictedArea->resize(mousePos);
 					auto& size = selectedRestrictedArea->getSize();
 					// Set origin to center
@@ -99,7 +99,7 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 		// Left mouse button
 		if (event.mouseButton.button == sf::Mouse::Left) {
 			switch (state) {
-			case MapEditor::State::GENERAL:
+			case MapEditor::State::General:
 			{
 				bool selected = false;
 				sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(m_window);
@@ -110,8 +110,8 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 					if (area->getKnob().getGlobalBounds().contains(mousePos)) {
 						// Select the component
 						selectedRestrictedArea = &*area;
-						if (selectionState != MapEditor::SelectionState::ROTATING) {
-							selectionState = MapEditor::SelectionState::RESIZING;
+						if (selectionState != MapEditor::SelectionState::Rotating) {
+							selectionState = MapEditor::SelectionState::Resizing;
 						}
 						selected = true;
 						break;
@@ -119,7 +119,7 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 					else if (area->getGlobalBounds().contains(mousePos)) {
 						selectedRestrictedArea = &*area;
 						grabOffset = mousePos - selectedRestrictedArea->getPosition();
-						selectionState = MapEditor::SelectionState::MOVING;
+						selectionState = MapEditor::SelectionState::Moving;
 						selected = true;
 						break;
 					}
@@ -130,7 +130,7 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 				}
 				break;
 			}
-			case MapEditor::State::WAYPOINT:
+			case MapEditor::State::Waypoint:
 			{
 				// Create a new waypoint
 				Waypoint waypoint(waypointTexture);
@@ -144,7 +144,7 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 				selectedLine = &pathLines.at(pathLines.size() - 1);
 				break;
 			}
-			case MapEditor::State::RES_AREA:
+			case MapEditor::State::ResArea:
 				// Create a new restricted area
 				ResizableComponent restrictedArea(restrictedAreaTexture, knobTexture);
 				restrictedArea.setPosition(selectedComponent->getPosition());
@@ -155,7 +155,7 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 		}
 		// Right mouse button
 		else if (event.mouseButton.button == sf::Mouse::Right) {
-			if (state == MapEditor::State::WAYPOINT && waypoints.size() > 1) {
+			if (state == MapEditor::State::Waypoint && waypoints.size() > 1) {
 				sf::Vector2f currentPosition = selectedComponent->getPosition();
 				waypoints.pop_back();
 				selectedComponent = &waypoints.at(waypoints.size() - 1);
@@ -170,7 +170,7 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 					selectedLine = &pathLines.at(pathLines.size() - 1);
 				}
 			}
-			else if (state == MapEditor::State::RES_AREA && restrictedAreas.size() > 1) {
+			else if (state == MapEditor::State::ResArea && restrictedAreas.size() > 1) {
 				sf::Vector2f currentPosition = selectedComponent->getPosition();
 				restrictedAreas.pop_back();
 				selectedComponent = &restrictedAreas.at(restrictedAreas.size() - 1);
@@ -187,7 +187,7 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 	else if (event.type == sf::Event::KeyPressed) {
 		// E
 		if (event.key.code == sf::Keyboard::E) {
-			if (state == MapEditor::State::GENERAL) {
+			if (state == MapEditor::State::General) {
 				sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(m_window);
 				Waypoint waypoint(waypointTexture);
 				sf::Vector2f center(waypoint.getSize().x / 2.f, waypoint.getSize().y / 2.f);
@@ -203,29 +203,29 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 				selectedLine = &pathLines.at(pathLines.size() - 1);
 
 				m_window.setMouseCursorVisible(false);
-				state = MapEditor::State::WAYPOINT;
+				state = MapEditor::State::Waypoint;
 			}
-			else if (state == MapEditor::State::WAYPOINT) {
+			else if (state == MapEditor::State::Waypoint) {
 				selectedComponent = NULL;
 				selectedLine = NULL;
 				waypoints.pop_back();
 				if (pathLines.size() > 0) pathLines.pop_back();
 				m_window.setMouseCursorVisible(true);
-				state = MapEditor::State::GENERAL;
+				state = MapEditor::State::General;
 			}
 		}
 		// F
 		else if (event.key.code == sf::Keyboard::F) {
-			if (selectionState == MapEditor::SelectionState::ROTATING) {
-				selectionState = MapEditor::SelectionState::MOVING;
+			if (selectionState == MapEditor::SelectionState::Rotating) {
+				selectionState = MapEditor::SelectionState::Moving;
 			}
 			else {
-				selectionState = MapEditor::SelectionState::ROTATING;
+				selectionState = MapEditor::SelectionState::Rotating;
 			}
 		}
 		// R
 		else if (event.key.code == sf::Keyboard::R) {
-			if (state == MapEditor::State::GENERAL) {
+			if (state == MapEditor::State::General) {
 				sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(m_window);
 				ResizableComponent restrictedArea(restrictedAreaTexture, knobTexture);
 				sf::Vector2f center(restrictedArea.getSize().x / 2.f, restrictedArea.getSize().y / 2.f);
@@ -234,18 +234,18 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 				selectedComponent = &restrictedAreas.at(restrictedAreas.size() - 1);
 
 				m_window.setMouseCursorVisible(false);
-				state = MapEditor::State::RES_AREA;
+				state = MapEditor::State::ResArea;
 			}
-			else if (state == MapEditor::State::RES_AREA) {
+			else if (state == MapEditor::State::ResArea) {
 				selectedComponent = NULL;
 				restrictedAreas.pop_back();
 				m_window.setMouseCursorVisible(true);
-				state = MapEditor::State::GENERAL;
+				state = MapEditor::State::ResArea;
 			}
 		}
 		// S
 		else if (event.key.code == sf::Keyboard::S) {
-			if (state == MapEditor::State::GENERAL) {
+			if (state == MapEditor::State::ResArea) {
 				// Initialize map data
 				MapData mapData;
 				mapData.name = "level_2";
@@ -279,7 +279,7 @@ void MapEditor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		m_window.draw(waypoint);
 	}
 
-	if (state == MapEditor::State::WAYPOINT && waypoints.size() > 1) {
+	if (state == MapEditor::State::Waypoint && waypoints.size() > 1) {
 		// Create a line from the selected marker to the last marker that has been placed
 		auto point1 = waypoints.at(waypoints.size() - 2).getPosition();
 		auto point2 = selectedComponent->getPosition();

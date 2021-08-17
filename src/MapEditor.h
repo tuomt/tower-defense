@@ -25,11 +25,11 @@ private:
 	sf::Text controlsText; // A text which shows editor controls
 	sf::RectangleShape controlsBackground; // A background rectangle for the controls
 	bool showControls = true; // A bool that determines whether the controls are visible
-	enum class State { GENERAL, WAYPOINT, RES_AREA };
-	State state = MapEditor::State::GENERAL;
+	enum class State { General, Waypoint, ResArea };
+	State state = MapEditor::State::General;
 
-	enum class SelectionState { MOVING, ROTATING, RESIZING };
-	SelectionState selectionState = MapEditor::SelectionState::MOVING;
+	enum class SelectionState { Moving, Rotating, Resizing };
+	SelectionState selectionState = MapEditor::SelectionState::Moving;
 
 	sf::Texture mapTexture;
 	sf::Texture waypointTexture;
