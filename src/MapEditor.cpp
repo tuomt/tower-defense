@@ -238,9 +238,10 @@ void MapEditor::handleInput(sf::Event& event, float dt) {
 			}
 			else if (state == MapEditor::State::ResArea) {
 				selectedComponent = NULL;
+				selectedRestrictedArea = nullptr;
 				restrictedAreas.pop_back();
 				m_window.setMouseCursorVisible(true);
-				state = MapEditor::State::ResArea;
+				state = MapEditor::State::General;
 			}
 		}
 		// S
