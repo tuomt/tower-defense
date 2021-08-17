@@ -56,6 +56,9 @@ void Game::handleInput(sf::Event& event, float dt)
 		if (event.key.code == sf::Keyboard::Escape) {
 			m_window.close();
 		}
+		else if (event.key.code == sf::Keyboard::D) {
+			m_showDebug = !m_showDebug;
+		}
 		else if (event.key.code == sf::Keyboard::Space) {
 			if (!m_round.isInProgress()) {
 				std::cout << "Starting new round..\n";
@@ -305,7 +308,8 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		m_window.draw(armor);
 	}
 
-	m_window.draw(debugRect);
+	if (m_showDebug) m_window.draw(debugRect);
+
 	for (auto& tower : m_towers) {
 		m_window.draw(tower);
 		for (auto& p : tower.m_projectiles) {
@@ -317,17 +321,20 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	m_window.draw(m_moneyText);
 	m_window.draw(m_healthBar);
 
-	for (auto& area : m_restrictedAreas) {
-		m_window.draw(area);
+
+	if (m_showDebug) {
+		for (auto& area : m_restrictedAreas) {
+			m_window.draw(area);
+		}
+		m_window.draw(debugCircle);
+		m_window.draw(debugMuzzle);
+		m_window.draw(debugText);
+		m_window.draw(debugTraverseCenter);
+		m_window.draw(debugTraverseLeft);
+		m_window.draw(debugTraverseRight);
+		m_window.draw(debugAim);
 	}
 
-	m_window.draw(debugCircle);
-	m_window.draw(debugMuzzle);
-	m_window.draw(debugText);
-	m_window.draw(debugTraverseCenter);
-	m_window.draw(debugTraverseLeft);
-	m_window.draw(debugTraverseRight);
-	m_window.draw(debugAim);
 }
 
 bool Game::isReadyToSpawn() {

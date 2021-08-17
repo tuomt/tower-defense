@@ -52,6 +52,7 @@ private:
 	void loadTextures();
 
 	bool m_pause = false;
+	bool m_showDebug = false;
 
 	struct Selection {
 		enum class State { Moving, Rotating };
