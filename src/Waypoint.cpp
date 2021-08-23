@@ -32,6 +32,16 @@ float Waypoint::getRotation() const
 	return m_sprite.getRotation();
 }
 
+sf::FloatRect Waypoint::getGlobalBounds() const
+{
+	return m_sprite.getGlobalBounds();
+}
+
+sf::FloatRect Waypoint::getLocalBounds() const
+{
+	return m_sprite.getLocalBounds();
+}
+
 void Waypoint::setPosition(const sf::Vector2f& position)
 {
 	m_sprite.setPosition(position);
