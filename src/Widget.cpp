@@ -95,10 +95,16 @@ void Widget::handleEvent(sf::Event event)
 		WidgetEvent we = iterator->second;
 		if (we.hasAction()) {
 			if (!we.hasCondition()) {
+				// Call the action method
 				we.getAction()(event);
 			}
 			else if (we.getCondition()(event)) {
+				// Call the action method
 				we.getAction()(event);
+			}
+			else if (we.hasAltAction()) {
+				// Call the alternative action method
+				we.getAltAction()(event);
 			}
 		}
 		++iterator;

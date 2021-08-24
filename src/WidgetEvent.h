@@ -7,6 +7,8 @@ class WidgetEvent
 private:
 	// This action will be executed when the event is fired and conditions are fulfilled
 	std::function<void(sf::Event event)> m_action = nullptr;
+	// This action will be executed when conditions are not fulfilled
+	std::function<void(sf::Event event)> m_altAction = nullptr;
 	// This condition has to be passed in order to execute the action
 	std::function<bool(sf::Event event)> m_condition = nullptr;
 	// The event type that an event listener listens to in order to fire this event
@@ -14,12 +16,15 @@ private:
 public:
 	WidgetEvent(sf::Event::EventType type);
 	void setAction(std::function<void(sf::Event event)> action);
+	void setAltAction(std::function<void(sf::Event event)> altAction);
 	void setCondition(std::function<bool(sf::Event event)> condition);
 
 	const std::function<void(sf::Event event)>& getAction() const;
+	const std::function<void(sf::Event event)>& getAltAction() const;
 	const std::function<bool(sf::Event event)>& getCondition() const;
 	sf::Event::EventType getType() const;
 
 	bool hasAction() const;
+	bool hasAltAction() const;
 	bool hasCondition() const;
 };

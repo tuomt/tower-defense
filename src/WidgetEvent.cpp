@@ -9,6 +9,11 @@ void WidgetEvent::setAction(std::function<void(sf::Event event)> action)
 	m_action = action;
 }
 
+void WidgetEvent::setAltAction(std::function<void(sf::Event event)> altAction)
+{
+	m_altAction = altAction;
+}
+
 void WidgetEvent::setCondition(std::function<bool(sf::Event event)> condition)
 {
 	m_condition = condition;
@@ -17,6 +22,11 @@ void WidgetEvent::setCondition(std::function<bool(sf::Event event)> condition)
 const std::function<void(sf::Event event)>& WidgetEvent::getAction() const
 {
 	return m_action;
+}
+
+const std::function<void(sf::Event event)>& WidgetEvent::getAltAction() const
+{
+	return m_altAction;
 }
 
 const std::function<bool(sf::Event event)>& WidgetEvent::getCondition() const
@@ -32,6 +42,12 @@ sf::Event::EventType WidgetEvent::getType() const
 bool WidgetEvent::hasAction() const
 {
 	if (m_action) return true;
+	else return false;
+}
+
+bool WidgetEvent::hasAltAction() const
+{
+	if (m_altAction) return true;
 	else return false;
 }
 
