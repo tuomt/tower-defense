@@ -30,7 +30,8 @@ add_executable (td src/Armor.cpp
 	src/Button.cpp 
 	src/Gui.cpp 
 	src/GuiStack.cpp 
-	src/WidgetEvent.cpp)
+	src/WidgetEvent.cpp
+	src/TextBox.cpp)
 
 # TODO: Add tests and install targets if needed.
 
