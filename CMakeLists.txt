@@ -31,7 +31,8 @@ add_executable (td src/Armor.cpp
 	src/Gui.cpp 
 	src/GuiStack.cpp 
 	src/WidgetEvent.cpp
-	src/TextBox.cpp)
+	src/TextBox.cpp
+	src/EditorStartGui.cpp)
 
 # TODO: Add tests and install targets if needed.
 

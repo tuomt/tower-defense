@@ -5,7 +5,6 @@
 #include "GuiStack.h"
 #include "MapEditor.h"
 #include "Game.h"
-#include "TestScene.h"
 #include "MainMenu.h"
 
 using namespace Helper;
