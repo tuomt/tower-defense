@@ -5,7 +5,9 @@
 class SceneManager
 {
 public:
-	std::unique_ptr<Scene> currentScene;
+
+	std::unique_ptr<Scene> currentScene = nullptr;
+	std::unique_ptr<Scene> nextScene = nullptr;
 
 	static SceneManager& getInstance() {
 		static SceneManager instance;
@@ -14,12 +16,13 @@ public:
 
 private:
 	SceneManager() {}
-	//SceneManager(SceneManager const&);
+	//SceneManager(SceneManager const&);	
 public:
 	// Prevent making a copy of the singleton
 	SceneManager(const SceneManager&) = delete;
 	SceneManager(SceneManager&&) = delete;
 	SceneManager& operator=(const SceneManager&) = delete;
 	SceneManager& operator=(SceneManager&&) = delete;
-};
 
+	void enqueueScene(std::unique_ptr<Scene> scene);
+};
