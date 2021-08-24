@@ -15,6 +15,9 @@ public:
 	const sf::Vector2f getSize() const;
 	float getRotation() const override;
 
+	sf::FloatRect getGlobalBounds() const;
+	sf::FloatRect getLocalBounds() const;
+
 	void setPosition(const sf::Vector2f& position) override;
 	void setOrigin(const sf::Vector2f& origin) override;
 	void rotate(float angle) override;

@@ -9,12 +9,14 @@ include_directories("../../SFML-2.5.1/include")
 
 # Add source to this project's executable.
 add_executable (td src/Armor.cpp 
-	src/Collision.cpp 
+	src/Collision.cpp
+	src/CollisionHandler.cpp 
 	src/Game.cpp 
 	src/HealthBar.cpp 
 	src/Helper.cpp 
 	src/main.cpp 
 	src/MapEditor.cpp 
+	src/Placeable.cpp
 	src/Projectile.cpp 
 	src/ResizableComponent.cpp
 	src/Round.cpp

@@ -22,31 +22,34 @@ unsigned int Round::getNumber() const
 	return m_number;
 }
 
-float Round::getAttackerStrength() const {
+float Round::getAttackerStrength() const 
+{
 	return m_attackerStrength;
 }
 
-std::size_t Round::getMinArmorIndex() const {
+std::size_t Round::getMinArmorIndex() const 
+{
 	switch (m_stage) {
 	case Stage::WW2:
-	case Stage::COLD_WAR:
+	case Stage::ColdWar:
 		return 0;
-	case Stage::MODERN:
+	case Stage::Modern:
 		return 3;
-	case Stage::FUTURE:
+	case Stage::Future:
 		return 6;
 	}
 }
 
-std::size_t Round::getMaxArmorIndex() const {
+std::size_t Round::getMaxArmorIndex() const 
+{
 	switch (m_stage) {
 	case Stage::WW2:
 		return 2;
-	case Stage::COLD_WAR:
+	case Stage::ColdWar:
 		return 5;
-	case Stage::MODERN:
+	case Stage::Modern:
 		return 8;
-	case Stage::FUTURE:
+	case Stage::Future:
 		return 11;
 	}
 }

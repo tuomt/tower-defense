@@ -5,6 +5,7 @@
 #include "Shop.h"
 #include "Round.h"
 #include "Scene.h"
+#include "Placeable.h"
 #include "Tower.h"
 #include "Armor.h"
 #include "Projectile.h"
@@ -43,7 +44,7 @@ private:
 	std::list<Armor> m_armors;
 	std::list<Tower> m_towers;
 	std::vector<sf::Vector2f> m_waypoints;
-	std::vector<sf::RectangleShape> m_restrictedAreas;
+	std::vector<sf::Sprite> m_restrictedAreas;
 	sf::Sprite m_mapSprite;
 
 	void loadAttributes();
@@ -51,7 +52,39 @@ private:
 	void loadTextures();
 
 	bool m_pause = false;
-	bool m_rotating = false;
+	bool m_showDebug = false;
+
+	struct Selection {
+		enum class State { Moving, Rotating };
+		State state;
+		Placeable* object;
+		bool canBePlaced = false;
+
+		void activate(Placeable* target)
+		{
+			object = target;
+		}
+
+		void deactivate() 
+		{
+			state = State::Moving;
+			object = nullptr;
+			canBePlaced = false;
+		}
+
+		bool isActive() 
+		{
+			if (object) return true;
+			else return false;
+		}
+	};
+
+	Selection m_selection =
+	{
+		Selection::State::Moving,
+		nullptr,
+		false
+	};
 
 	// DEBUG STUFF
 	sf::RectangleShape debugRect;
@@ -64,6 +97,7 @@ private:
 	sf::Text debugText;
 	void setDebug(Tower& tower);
 	void updateDebug(Tower& tower);
+
 public:
 	Game(sf::RenderWindow& window);
 	virtual void handleInput(sf::Event& event, float dt) override;

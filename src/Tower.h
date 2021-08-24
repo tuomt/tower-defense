@@ -1,16 +1,17 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <list>
+
+#include "Placeable.h"
 #include "Projectile.h"
 #include "nlohmann/json.hpp"
-#include <list>
 #include "Armor.h"
 
 using json = nlohmann::json;
 
-class Tower : public sf::Sprite
+class Tower : public Placeable
 {
 private:
-	const json& m_attributes;
 	float m_range = 100.f;
 	float m_traverse = 360.f;
 	float m_baseDirection = 0.f;

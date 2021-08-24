@@ -4,7 +4,7 @@
 #include "Helper.h"
 #include "TextureManager.h"
 #include <iostream>
-#include "Collision.h"
+#include "CollisionHandler.h"
 
 using namespace Helper;
 
@@ -35,9 +35,9 @@ Game::Game(sf::RenderWindow& window)
 
 	// Load map and textures
 	auto& textureManager = TextureManager::getInstance();
+	loadTextures();
 	loadMap("level_1");
 	//loadAttributes(); // Must be loaded before textures
-	loadTextures();
 	m_mapSprite.setTexture(textureManager.getTexture("background"));
 	//m_shop.setAttributes(m_towerAttributes);
 	m_shop.init(m_window);
@@ -56,6 +56,9 @@ void Game::handleInput(sf::Event& event, float dt)
 		if (event.key.code == sf::Keyboard::Escape) {
 			m_window.close();
 		}
+		else if (event.key.code == sf::Keyboard::D) {
+			m_showDebug = !m_showDebug;
+		}
 		else if (event.key.code == sf::Keyboard::Space) {
 			if (!m_round.isInProgress()) {
 				std::cout << "Starting new round..\n";
@@ -69,32 +72,36 @@ void Game::handleInput(sf::Event& event, float dt)
 			m_pause = !m_pause;
 		}
 		else if (event.key.code == sf::Keyboard::R) {
-			if (m_selectedItem) {
-				m_rotating = true;
+			if (m_selection.isActive() &&
+					m_selection.object->getType() == Placeable::Type::Tower) {
+				m_selection.state = Selection::State::Rotating;
 				m_window.setMouseCursorVisible(false);
 			}
 		}
 	}
 	else if (event.type == sf::Event::KeyReleased) {
 		if (event.key.code == sf::Keyboard::R) {
-			m_rotating = false;
-			if (m_selectedItem) {
-				sf::Mouse::setPosition((sf::Vector2i)m_towers.back().getPosition(), m_window);
+			if (m_selection.isActive()) {
+				sf::Mouse::setPosition((sf::Vector2i)m_selection.object->getPosition(), m_window);
+				m_selection.state = Selection::State::Moving;
 			}
 			m_window.setMouseCursorVisible(true);
 		}
 	}
 	else if (event.type == sf::Event::MouseMoved) {
 		auto& mousePos = getMousePos();
-		if (m_selectedItem) {
-			if (m_rotating) {
+		if (m_selection.isActive()) {
+			switch (m_selection.state) 
+			{
+			case Selection::State::Moving:
+				m_selection.object->setPosition(mousePos);
+				break;
+			case Selection::State::Rotating:
 				float angle = radToDeg(getAngle(mousePos, m_towers.back().getPosition()));
 				m_towers.back().setRotation(angle);
 				m_towers.back().setBaseDirection(m_towers.back().getRotation());
 				updateDebug(m_towers.back());
-			}
-			else {
-				m_towers.back().setPosition(mousePos);
+				break;
 			}
 		}
 		auto item = m_shop.isMouseOnItem(mousePos);
@@ -110,15 +117,14 @@ void Game::handleInput(sf::Event& event, float dt)
 	else if (event.type == sf::Event::MouseButtonPressed) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
 			if (m_leftMouse == MouseState::RELEASED) {
-				if (m_selectedItem) {
+				if (m_selection.isActive() && m_selection.canBePlaced) {
 					placeSelectedItem();
 					setDebug(m_towers.back());
 				}
-				else {
+				else if (!m_selection.isActive()) {
 					Shop::Item* selectedItem = m_shop.getSelectedItem();
 
 					if (selectedItem && getMoney() >= selectedItem->getCost()) {
-						m_selectedItem = selectedItem;
 						startPlacingItem();
 						setDebug(m_towers.back());
 					}
@@ -128,10 +134,10 @@ void Game::handleInput(sf::Event& event, float dt)
 		}
 		else if (event.mouseButton.button == sf::Mouse::Right) {
 			if (m_rightMouse == MouseState::RELEASED) {
-				if (m_selectedItem) {
+				if (m_selection.isActive()) {
 					// Unselect item
 					m_towers.pop_back();
-					m_selectedItem = nullptr;
+					m_selection.deactivate();
 				}
 			}
 			m_rightMouse = MouseState::PRESSED;
@@ -166,6 +172,25 @@ void Game::update(float dt)
 		}
 	}
 
+	if (m_selection.isActive()) {
+		for (auto& area : m_restrictedAreas) {
+			if (CollisionHandler::collides(*m_selection.object, area) ||
+				!m_selection.object->isInBounds(m_mapSprite.getGlobalBounds())) {
+				debugRect.setFillColor(sf::Color::Red);
+				debugText.setString("TRUE");
+				debugText.setFillColor(sf::Color::Green);
+				m_selection.canBePlaced = false;
+				break;
+			}
+			else {
+				debugRect.setFillColor(sf::Color::Green);
+				debugText.setString("FALSE");
+				debugText.setFillColor(sf::Color::Red);
+				m_selection.canBePlaced = true;
+			}
+		}
+	}
+
 	auto armor = m_armors.begin();
 	bool oncePerTower = true;
 
@@ -179,7 +204,7 @@ void Game::update(float dt)
 
 		for (auto& tower : m_towers) {
 			// Skip if the tower is being placed
-			if (&tower == &m_towers.back() && m_selectedItem) {
+			if (&tower == &m_towers.back() && m_selection.isActive()) {
 				break;
 			}
 
@@ -216,7 +241,7 @@ void Game::update(float dt)
 					}
 				}
 
-				if (Collision::collides(*armor, *proj)) {
+				if (CollisionHandler::collides(*armor, *proj)) {
 					armor->setHealth(armor->getHealth() - proj->getDamage());
 					proj = tower.m_projectiles.erase(proj);
 				}
@@ -272,9 +297,6 @@ void Game::update(float dt)
 	if (m_towers.size() > 0)
 		updateDebug(m_towers.back());
 
-	std::string s = "(" + std::to_string(getMousePos().x);
-	s += ", " + std::to_string(getMousePos().y) + ")\n";
-	debugText.setString(s);
 }
 
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -286,7 +308,8 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		m_window.draw(armor);
 	}
 
-	m_window.draw(debugRect);
+	if (m_showDebug) m_window.draw(debugRect);
+
 	for (auto& tower : m_towers) {
 		m_window.draw(tower);
 		for (auto& p : tower.m_projectiles) {
@@ -298,13 +321,20 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	m_window.draw(m_moneyText);
 	m_window.draw(m_healthBar);
 
-	m_window.draw(debugCircle);
-	m_window.draw(debugMuzzle);
-	m_window.draw(debugText);
-	m_window.draw(debugTraverseCenter);
-	m_window.draw(debugTraverseLeft);
-	m_window.draw(debugTraverseRight);
-	m_window.draw(debugAim);
+
+	if (m_showDebug) {
+		for (auto& area : m_restrictedAreas) {
+			m_window.draw(area);
+		}
+		m_window.draw(debugCircle);
+		m_window.draw(debugMuzzle);
+		m_window.draw(debugText);
+		m_window.draw(debugTraverseCenter);
+		m_window.draw(debugTraverseLeft);
+		m_window.draw(debugTraverseRight);
+		m_window.draw(debugAim);
+	}
+
 }
 
 bool Game::isReadyToSpawn() {
@@ -396,6 +426,8 @@ void Game::loadAttributes()
 
 void Game::loadMap(std::string mapName)
 {
+	auto& textureManager = TextureManager::getInstance();
+
 	std::ifstream mapFile("../cfg/maps/" + mapName + ".json");
 	json map;
 	mapFile >> map;
@@ -404,6 +436,19 @@ void Game::loadMap(std::string mapName)
 	}
 
 	for (auto& area : map["restrictedAreas"]) {
+		sf::Sprite ra;
+		ra.setTexture(textureManager.getTexture("restricted_area"));
+		sf::Vector2f size(area["size"]["x"], area["size"]["y"]);
+		sf::IntRect textureRect;
+		textureRect.width = size.x;
+		textureRect.height = size.y;
+		ra.setTextureRect(textureRect);
+		ra.setOrigin(sf::Vector2f(area["origin"]["x"], area["origin"]["y"]));
+		ra.setPosition(sf::Vector2f(area["position"]["x"], area["position"]["y"]));
+		ra.setRotation(area["rotation"]);
+		m_restrictedAreas.push_back(ra);
+
+		/*
 		sf::RectangleShape rect;
 		rect.setFillColor(sf::Color::Transparent);
 		rect.setOutlineColor(sf::Color::Red);
@@ -413,6 +458,7 @@ void Game::loadMap(std::string mapName)
 		rect.setPosition(sf::Vector2f(area["position"]["x"], area["position"]["y"]));
 		rect.setRotation(area["rotation"]);
 		m_restrictedAreas.push_back(rect);
+		*/
 	}
 }
 
@@ -421,6 +467,9 @@ void Game::loadTextures()
 	auto& textureManager = TextureManager::getInstance();
 	std::cout << "loadTextures()\n";
 	textureManager.loadTexture("background", "level_1.png");
+	textureManager.loadTexture("restricted_area", "restricted_area.png");
+	textureManager.getTexture("restricted_area").setRepeated(true);
+	textureManager.getTexture("restricted_area").setSmooth(true);
 	textureManager.loadTexture("shop_bar", "shop_bar.png");
 	textureManager.loadTexture("shop_item_background", "shop_item_background.png");
 	textureManager.loadTexture("buy_button", "buy_button.png");
@@ -443,18 +492,29 @@ void Game::loadTextures()
 
 void Game::startPlacingItem()
 {
-	Tower tower(m_towerAttributes[m_selectedItem->getId()]);
-	tower.setOrigin(tower.getGlobalBounds().width / 2.f, tower.getGlobalBounds().height / 2.f);
-	tower.setPosition(getMousePos());
-	tower.setScale(0.5f, 0.5f);
-	m_towers.push_back(tower);
+	auto item = m_shop.getSelectedItem();
+
+	switch (item->getType()) 
+	{
+		default:
+			// TODO: add new types
+			break;
+		case Placeable::Type::Tower:
+			Tower tower(m_towerAttributes[m_shop.getSelectedItem()->getId()]);
+			tower.setOrigin(tower.getGlobalBounds().width / 2.f, tower.getGlobalBounds().height / 2.f);
+			tower.setPosition(getMousePos());
+			tower.setScale(0.5f, 0.5f);
+			m_towers.push_back(tower);
+			m_selection.activate(&m_towers.back());
+			break;
+	}
 }
 
 void Game::placeSelectedItem()
 {
-	setMoney(getMoney() - m_selectedItem->getCost());
+	setMoney(getMoney() - m_selection.object->getCost());
 	debugRect.setFillColor(sf::Color::Transparent);
-	m_selectedItem = nullptr;
+	m_selection.deactivate();
 }
 
 void Game::setDebug(Tower& tower)
