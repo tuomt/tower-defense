@@ -22,7 +22,15 @@ add_executable (td src/Armor.cpp
 	src/Shop.cpp
 	src/TextureManager.cpp
 	src/Tower.cpp
-	src/Waypoint.cpp)
+	src/Waypoint.cpp 
+	src/SceneManager.cpp 
+	src/MainMenu.cpp
+	src/MainGui.cpp
+	src/Widget.cpp
+	src/Button.cpp 
+	src/Gui.cpp 
+	src/GuiStack.cpp 
+	src/WidgetEvent.cpp)
 
 # TODO: Add tests and install targets if needed.
 
