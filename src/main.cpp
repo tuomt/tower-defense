@@ -2,8 +2,11 @@
 #include <time.h>
 #include "Helper.h"
 #include "SceneManager.h"
+#include "GuiStack.h"
 #include "MapEditor.h"
 #include "Game.h"
+#include "TestScene.h"
+#include "MainMenu.h"
 
 using namespace Helper;
 
@@ -17,12 +20,18 @@ int main()
 	window.setFramerateLimit(120);
 
 	SceneManager& sceneManager = SceneManager::getInstance();
-	sceneManager.currentScene = std::make_unique<Game>(window);
+	sceneManager.enqueueScene(std::make_unique<MainMenu>(window));
 
 	sf::Clock clock;
 
 	while (window.isOpen())
 	{
+		GuiStack::getInstance().update();
+
+		if (sceneManager.nextScene) {
+			sceneManager.currentScene = std::move(sceneManager.nextScene);
+		}
+
 		sf::Event event;
 
 		// Get delta time
