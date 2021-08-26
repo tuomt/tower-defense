@@ -4,14 +4,10 @@
 #include <string>
 
 // Define default font path
-#ifdef __unix__
-#define DEFAULT_FONT_PATH "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf"
-#else
-#define DEFAULT_FONT_PATH "C:\\windows\\fonts\\arial.ttf"
-#endif
+#define DEFAULT_FONT_PATH "../res/fonts/Aldrich-Regular.ttf"
 
 namespace Helper {
-	static const std::string defaultFontPath = DEFAULT_FONT_PATH;
+	static const std::string defaultFontPath = "../res/fonts/Aldrich-Regular.ttf";
 	void centerSprite(sf::Sprite& sprite, float x, float y);
 	sf::Vector2f getSpriteCenter(sf::Sprite& sprite);
 	float getDistance(sf::Vector2f a, sf::Vector2f b);
