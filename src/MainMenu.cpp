@@ -9,8 +9,8 @@
 MainMenu::MainMenu(sf::RenderWindow& window)
 	: Scene(window)
 {
+	loadTextures();
 	m_font.loadFromFile(DEFAULT_FONT_PATH);
-	TextureManager::getInstance().loadTexture("button", "button.png");
 	GuiStack::getInstance().push(std::make_shared<MainGui>(m_window, m_font));
 }
 
@@ -25,7 +25,18 @@ void MainMenu::update(float dt)
 
 void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	m_window.draw(m_background);
+
 	auto& guiStack = GuiStack::getInstance().get();
 	assert(guiStack.empty() == false);
 	m_window.draw(*guiStack.top());
+}
+
+void MainMenu::loadTextures()
+{
+	auto& tm = TextureManager::getInstance();
+	tm.loadTexture("button", "button.png");
+	tm.loadTexture("menu_button", "main_menu_button.png");
+	tm.loadTexture("menu_background", "main_menu_bg.png");
+	m_background.setTexture(tm.getTexture("menu_background"));
 }

@@ -9,9 +9,11 @@ class MainMenu : public Scene
 {
 private:
 	sf::Font m_font;
+	sf::Sprite m_background;
 public:
 	MainMenu(sf::RenderWindow& window);
 	virtual void handleInput(sf::Event& event, float dt) override;
 	virtual void update(float dt) override;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void loadTextures();
 };
