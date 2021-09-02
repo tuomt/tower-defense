@@ -58,8 +58,8 @@ MainGui::MainGui(sf::RenderWindow& window, sf::Font& font)
 	);
 
 	m_editorButton->addListener(m_editorButton->onClick, [&](auto event) { 
-			GuiStack::getInstance().push(std::make_shared<EditorStartGui>(m_window, m_font));
-			//SceneManager::getInstance().enqueueScene(std::make_unique<MapEditor>(m_window));
+			//GuiStack::getInstance().push(std::make_shared<EditorStartGui>(m_window, m_font));
+			SceneManager::getInstance().enqueueScene(std::make_unique<MapEditor>(m_window));
 		}
 	);
 	m_editorButton->addListener(m_editorButton->onHover, 
