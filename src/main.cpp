@@ -17,6 +17,7 @@ int main()
 
 	sf::RenderWindow window(sf::VideoMode(1600, 900), "Tower Defense", sf::Style::Default, settings);
 	window.setFramerateLimit(120);
+	window.setKeyRepeatEnabled(false);
 
 	SceneManager& sceneManager = SceneManager::getInstance();
 	sceneManager.enqueueScene(std::make_unique<MainMenu>(window));
