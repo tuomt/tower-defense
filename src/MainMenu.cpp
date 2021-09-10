@@ -12,6 +12,7 @@ MainMenu::MainMenu(sf::RenderWindow& window)
 	loadTextures();
 	m_font.loadFromFile(DEFAULT_FONT_PATH);
 	GuiStack::getInstance().push(std::make_shared<MainGui>(m_window, m_font));
+	m_window.setKeyRepeatEnabled(true);
 }
 
 void MainMenu::handleInput(sf::Event& event, float dt)

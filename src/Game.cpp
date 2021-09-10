@@ -11,6 +11,7 @@ using namespace Helper;
 Game::Game(sf::RenderWindow& window)
 	: Scene(window), m_shop((loadAttributes(), m_towerAttributes), m_font, m_money)
 {
+	m_window.setKeyRepeatEnabled(false);
 	// Load font
 	if (!m_font.loadFromFile(DEFAULT_FONT_PATH))
 		return;

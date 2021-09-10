@@ -16,6 +16,7 @@ using json = nlohmann::json;
 
 MapEditor::MapEditor(sf::RenderWindow& window)
 	: Scene(window), m_state(new WaypointState(*this)) {
+	m_window.setKeyRepeatEnabled(false);
 	loadTextures();
 }
 
