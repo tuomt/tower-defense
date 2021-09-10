@@ -36,5 +36,6 @@ public:
 
 	virtual void setPosition(sf::Vector2f pos) = 0;
 	virtual const sf::Vector2f& getPosition() const = 0;
+	virtual void update(float dt);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 };

@@ -85,6 +85,11 @@ bool Widget::contains(float x, float y) const
 	return contains(sf::Vector2f(x, y));
 }
 
+void Widget::update(float dt)
+{
+	// Override if needed
+}
+
 void Widget::handleEvent(sf::Event event)
 {
 	auto lowerBound = m_listeners.lower_bound(event.type);

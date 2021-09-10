@@ -19,6 +19,9 @@ void Gui::handleInput(sf::Event& event, float dt)
 
 void Gui::update(float dt)
 {
+	for (auto& widget : m_widgets) {
+		widget->update(dt);
+	}
 }
 
 void Gui::draw(sf::RenderTarget& target, sf::RenderStates states) const

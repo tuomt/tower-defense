@@ -22,6 +22,7 @@ void MainMenu::handleInput(sf::Event& event, float dt)
 
 void MainMenu::update(float dt)
 {
+	GuiStack::getInstance().get().top()->update(dt);
 }
 
 void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
