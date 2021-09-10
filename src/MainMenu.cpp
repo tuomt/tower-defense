@@ -40,5 +40,6 @@ void MainMenu::loadTextures()
 	tm.loadTexture("button", "button.png");
 	tm.loadTexture("menu_button", "main_menu_button.png");
 	tm.loadTexture("menu_background", "main_menu_bg.png");
+	tm.loadTexture("menu_textbox", "menu_textbox.png");
 	m_background.setTexture(tm.getTexture("menu_background"));
 }
