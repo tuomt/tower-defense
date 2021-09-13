@@ -139,7 +139,6 @@ void WaypointState::onKeyPressed(sf::Event& event, float dt)
 			}
 			m_editor.changeState(std::make_unique<ResAreaState>(m_editor));
 			//m_editor.m_window.setMouseCursorVisible(true);
-			m_selection.deactivate();
 			break;
 
 		case sf::Keyboard::Space: 

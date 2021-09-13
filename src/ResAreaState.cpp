@@ -128,7 +128,6 @@ void ResAreaState::onKeyPressed(sf::Event& event, float dt)
 		if (m_selectionState == SelectionState::Placing) {
 			//m_window.setMouseCursorVisible(true);
 		}
-		m_selection.deactivate();
 		break;
 	}
 	case sf::Keyboard::Space:
