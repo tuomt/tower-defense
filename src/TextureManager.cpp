@@ -11,12 +11,21 @@ sf::Texture& TextureManager::getTexture(const std::string& name)
 
 void TextureManager::loadTexture(const std::string& name, const std::string& fileName, Scene* scene)
 {
+	printf("Loading texture: %s", name.c_str());
 	// Load a texture from a file
 	sf::Texture texture;
-	assert(texture.loadFromFile(m_path + fileName));
+
+	// Check if texture is already loaded
+	if (m_textures.find(name) != m_textures.end()) {
+		printf(" - Already loaded.");
+		return;
+	}
+
+	printf("\n");
+	bool textureLoaded = texture.loadFromFile(m_path + fileName);
+	assert(textureLoaded);
 
 	// Insert the texture into the map
-	printf("Loading texture: %s\n", name.c_str());
 	m_textures[name] = std::make_pair(texture, scene);
 }
 
