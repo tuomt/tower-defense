@@ -1,4 +1,5 @@
 #include "TextBox.h"
+#include "Debug.h"
 
 TextBox::TextBox(const sf::Texture& bgTexture, const sf::Font& font)
 	: Widget(sf::Sprite(bgTexture)), m_text("", font, 12)
@@ -113,7 +114,7 @@ void TextBox::setNativeEventActions()
 {
 	onClick.setAction([&](sf::Event event) {
 		setActive(true);
-		printf("CLICK!\n");
+		DEBUG_PRINTF("CLICK!\n");
 	});
 
 	onClick.setAltAction([&](sf::Event event) {

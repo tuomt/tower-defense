@@ -1,11 +1,10 @@
 #include <fstream>
-#include <cstdio>
 #include "Game.h"
 #include "Helper.h"
 #include "TextureManager.h"
-#include <iostream>
 #include "CollisionHandler.h"
 #include "SceneManager.h"
+#include "Debug.h"
 
 using namespace Helper;
 
@@ -68,7 +67,7 @@ void Game::handleInput(sf::Event& event, float dt)
 		}
 		else if (event.key.code == sf::Keyboard::Space) {
 			if (!m_round.isInProgress()) {
-				std::cout << "Starting new round..\n";
+				DEBUG_COUT("Starting new round..\n");
 				// Start round
 				m_round.start();
 				m_roundText.setString("Round: " + std::to_string(m_round.getNumber()));
@@ -427,12 +426,12 @@ void Game::fillArmorQueue() {
 		}
 	}
 
-	std::cout << "Queue: ";
+	DEBUG_PRINTF("Queue: ");
 	for (auto& armor : armorIndices) {
 		m_armorQueue.push(armor);
-		std::cout << armor;
+		DEBUG_COUT(armor);
 	}
-	std::cout << "\n";
+	DEBUG_COUT("\n");
 }
 
 void Game::spawnNextArmor() {
@@ -451,7 +450,6 @@ void Game::spawnNextArmor() {
 
 void Game::loadAttributes()
 {
-	std::cout << "loadAttributes()\n";
 	std::ifstream ifStream;
 	ifStream.open("../cfg/towers.json");
 	ifStream >> m_towerAttributes;

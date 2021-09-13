@@ -1,6 +1,7 @@
 #include <assert.h>
 #include "TextureManager.h"
 #include "SceneManager.h"
+#include "Debug.h"
 
 sf::Texture& TextureManager::getTexture(const std::string& name)
 {
@@ -11,17 +12,17 @@ sf::Texture& TextureManager::getTexture(const std::string& name)
 
 void TextureManager::loadTexture(const std::string& name, const std::string& fileName, Scene* scene)
 {
-	printf("Loading texture: %s", name.c_str());
+	DEBUG_PRINTF("Loading texture: %s", name.c_str());
 	// Load a texture from a file
 	sf::Texture texture;
 
 	// Check if texture is already loaded
 	if (m_textures.find(name) != m_textures.end()) {
-		printf(" - Already loaded.");
+		DEBUG_PRINTF(" - Already loaded.");
 		return;
 	}
 
-	printf("\n");
+	DEBUG_PRINTF("\n");
 	bool textureLoaded = texture.loadFromFile(m_path + fileName);
 	assert(textureLoaded);
 
@@ -34,7 +35,7 @@ void TextureManager::unloadTexture(const std::string& name)
 	// Unload texture by it's name
 	auto it = m_textures.find(name);
 	assert(it != m_textures.end());
-	printf("Unloading texture: %s\n", it->first.c_str());
+	DEBUG_PRINTF("Unloading texture: %s\n", it->first.c_str());
 	m_textures.erase(it);
 }
 
@@ -46,7 +47,7 @@ void TextureManager::unloadCommonTextures()
 	for (auto it = m_textures.cbegin(); it != m_textures.cend();) {
 		Scene* relatedScene = it->second.second;
 		if (relatedScene == nullptr) {
-			printf("Unloading texture: %s\n", it->first.c_str());
+			DEBUG_PRINTF("Unloading texture: %s\n", it->first.c_str());
 			m_textures.erase(it++);
 		}
 		else {
@@ -63,7 +64,7 @@ void TextureManager::unloadSceneSpecificTextures(Scene* scene)
 	for (auto it = m_textures.cbegin(); it != m_textures.cend();) {
 		Scene* relatedScene = it->second.second;
 		if (relatedScene == scene) {
-			printf("Unloading texture: %s\n", it->first.c_str());
+			DEBUG_PRINTF("Unloading texture: %s\n", it->first.c_str());
 			m_textures.erase(it++);
 		}
 		else {
