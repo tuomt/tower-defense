@@ -25,4 +25,5 @@ public:
 	SceneManager& operator=(SceneManager&&) = delete;
 
 	void enqueueScene(std::unique_ptr<Scene> scene);
+	void quit();
 };

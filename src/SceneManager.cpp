@@ -8,3 +8,9 @@ void SceneManager::enqueueScene(std::unique_ptr<Scene> scene)
 		nextScene = std::move(scene);
 	}
 }
+
+void SceneManager::quit()
+{
+	currentScene = nullptr;
+	std::exit(0);
+}

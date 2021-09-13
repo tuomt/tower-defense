@@ -39,8 +39,9 @@ int main()
 
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
-				window.close();
+			if (event.type == sf::Event::Closed) {
+				sceneManager.quit();
+			}
 			else sceneManager.currentScene->handleInput(event, dt);
 		}
 		sceneManager.currentScene->update(dt);

@@ -73,7 +73,7 @@ MainGui::MainGui(sf::RenderWindow& window, sf::Font& font)
 		}
 	);
 
-	m_quitButton->addListener(m_quitButton->onClick, [&](auto event) { m_window.close(); });
+	m_quitButton->addListener(m_quitButton->onClick, [&](auto event) { SceneManager::getInstance().quit(); });
 
 	m_quitButton->addListener(m_quitButton->onHover, 
 		[&](auto event) {
