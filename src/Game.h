@@ -49,7 +49,6 @@ private:
 
 	void loadAttributes();
 	void loadMap(std::string mapName);
-	void loadTextures();
 
 	bool m_pause = false;
 	bool m_showDebug = false;
@@ -100,9 +99,13 @@ private:
 
 public:
 	Game(sf::RenderWindow& window);
+	~Game();
+
 	virtual void handleInput(sf::Event& event, float dt) override;
 	virtual void update(float dt) override;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void loadTextures() override;
+	virtual void unloadTextures() override;
 
 	void fillArmorQueue();
 	void spawnNextArmor();

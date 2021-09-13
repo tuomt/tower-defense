@@ -15,6 +15,11 @@ MainMenu::MainMenu(sf::RenderWindow& window)
 	m_window.setKeyRepeatEnabled(true);
 }
 
+MainMenu::~MainMenu()
+{
+	unloadTextures();
+}
+
 void MainMenu::handleInput(sf::Event& event, float dt)
 {
 	GuiStack::getInstance().get().top()->handleInput(event, dt);
@@ -37,9 +42,14 @@ void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void MainMenu::loadTextures()
 {
 	auto& tm = TextureManager::getInstance();
-	tm.loadTexture("button", "button.png");
-	tm.loadTexture("menu_button", "main_menu_button.png");
-	tm.loadTexture("menu_background", "main_menu_bg.png");
-	tm.loadTexture("menu_textbox", "menu_textbox.png");
+	tm.loadTexture("button", "button.png", this);
+	tm.loadTexture("menu_button", "main_menu_button.png", this);
+	tm.loadTexture("menu_background", "main_menu_bg.png", this);
+	tm.loadTexture("menu_textbox", "menu_textbox.png", this);
 	m_background.setTexture(tm.getTexture("menu_background"));
+}
+
+void MainMenu::unloadTextures()
+{
+	TextureManager::getInstance().unloadSceneSpecificTextures(this);
 }

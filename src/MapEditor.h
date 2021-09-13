@@ -15,8 +15,6 @@ class MapEditor : public Scene
 private:
 	std::unique_ptr<EditorState> m_state;
 	sf::Sprite m_mapSprite; // A sprite for drawing the map (background image)
-
-	void loadTextures();
 public:
 	template <class T>
 	struct Selection 
@@ -46,9 +44,14 @@ public:
 	std::vector<std::shared_ptr<ResizableComponent>> m_restrictedAreas; // A vector of restricted areas where towers cannot be placed
 
 	MapEditor(sf::RenderWindow& window);
+	~MapEditor();
+
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void handleInput(sf::Event& event, float dt);
-	void update(float dt);
+	void handleInput(sf::Event& event, float dt) override;
+	void update(float dt) override;
+	void loadTextures() override;
+	void unloadTextures() override;
+
 	void changeState(std::unique_ptr<EditorState> state);
 	void saveMap(std::string mapName);
 };

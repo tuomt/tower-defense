@@ -12,8 +12,12 @@ private:
 	sf::Sprite m_background;
 public:
 	MainMenu(sf::RenderWindow& window);
+	~MainMenu();
+
+	// Inherited via Scene
 	virtual void handleInput(sf::Event& event, float dt) override;
 	virtual void update(float dt) override;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void loadTextures();
+	virtual void loadTextures() override;
+	virtual void unloadTextures() override;
 };

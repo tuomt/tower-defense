@@ -10,6 +10,7 @@
 #include "CollisionHandler.h"
 #include "WaypointState.h"
 #include "nlohmann/json.hpp"
+#include "SceneManager.h"
 
 using namespace Helper;
 using json = nlohmann::json;
@@ -20,13 +21,18 @@ MapEditor::MapEditor(sf::RenderWindow& window)
 	loadTextures();
 }
 
+MapEditor::~MapEditor()
+{
+	unloadTextures();
+}
+
 void MapEditor::handleInput(sf::Event& event, float dt) {
 
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code)
 		{
 		case sf::Keyboard::Escape:
-			m_window.close();
+			SceneManager::getInstance().quit();
 			break;
 		case sf::Keyboard::S:
 			saveMap("level_2");
@@ -114,16 +120,21 @@ void MapEditor::loadTextures()
 {
 	auto& tm = TextureManager::getInstance();
 
-	tm.loadTexture("level_1", "level_1.png");
+	tm.loadTexture("level_1", "level_1.png", this);
 	m_mapSprite.setTexture(tm.getTexture("level_1"));
 
-	tm.loadTexture("waypoint", "waypoint.png");
+	tm.loadTexture("waypoint", "waypoint.png", this);
 	tm.getTexture("waypoint").setSmooth(true);
 
-	tm.loadTexture("restricted_area", "restricted_area.png");
+	tm.loadTexture("restricted_area", "restricted_area.png", this);
 	tm.getTexture("restricted_area").setSmooth(true);
 	tm.getTexture("restricted_area").setRepeated(true);
 
-	tm.loadTexture("resize_knob", "resize_knob.png");
+	tm.loadTexture("resize_knob", "resize_knob.png", this);
 	tm.getTexture("resize_knob").setSmooth(true);
+}
+
+void MapEditor::unloadTextures()
+{
+	TextureManager::getInstance().unloadSceneSpecificTextures(this);
 }

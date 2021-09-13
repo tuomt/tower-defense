@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <string>
+#include "Scene.h"
 
 class TextureManager
 {
@@ -12,10 +13,10 @@ public:
 	}
 
 private:
-	TextureManager() {}
+	TextureManager() {};
 
 	const std::string m_path = "../img/";
-	std::map<std::string, sf::Texture> m_textures;
+	std::map<std::string, std::pair<sf::Texture, Scene*>> m_textures;
 public:
 	// Prevent making a copy of the singleton
 	TextureManager(const TextureManager&) = delete;
@@ -24,8 +25,8 @@ public:
 	TextureManager& operator=(TextureManager&&) = delete;
 
 	sf::Texture& getTexture(const std::string& name);
-	void loadTexture(const std::string& name, const std::string& fileName);
+	void loadTexture(const std::string& name, const std::string& fileName, Scene* scene);
+	void unloadTexture(const std::string& name);
+	void unloadCommonTextures();
+	void unloadSceneSpecificTextures(Scene* scene);
 };
-
-
-

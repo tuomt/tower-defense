@@ -5,6 +5,7 @@
 #include "TextureManager.h"
 #include <iostream>
 #include "CollisionHandler.h"
+#include "SceneManager.h"
 
 using namespace Helper;
 
@@ -51,11 +52,16 @@ Game::Game(sf::RenderWindow& window)
 	debugText.setPosition(10.f, 50.f);
 }
 
+Game::~Game()
+{
+	unloadTextures();
+}
+
 void Game::handleInput(sf::Event& event, float dt)
 {
 	if (event.type == sf::Event::KeyPressed) {
 		if (event.key.code == sf::Keyboard::Escape) {
-			m_window.close();
+			SceneManager::getInstance().quit();
 		}
 		else if (event.key.code == sf::Keyboard::D) {
 			m_showDebug = !m_showDebug;
@@ -338,6 +344,37 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 }
 
+void Game::loadTextures()
+{
+	auto& textureManager = TextureManager::getInstance();
+	textureManager.loadTexture("background", "level_1.png", this);
+	textureManager.loadTexture("restricted_area", "restricted_area.png", this);
+	textureManager.getTexture("restricted_area").setRepeated(true);
+	textureManager.getTexture("restricted_area").setSmooth(true);
+	textureManager.loadTexture("shop_bar", "shop_bar.png", this);
+	textureManager.loadTexture("shop_item_background", "shop_item_background.png", this);
+	textureManager.loadTexture("buy_button", "buy_button.png", this);
+
+	for (auto& tower : m_towerAttributes) {
+		textureManager.loadTexture(tower["name"], tower["texture"], this);
+		for (auto& projectile : tower["projectiles"]) {
+			textureManager.loadTexture(projectile["name"], projectile["texture"], this);
+			textureManager.getTexture(projectile["name"]).setSmooth(true);
+		}
+		textureManager.getTexture(tower["name"]).setSmooth(true);
+	}
+
+	for (auto& armor : m_armorAttributes) {
+		textureManager.loadTexture(armor["name"], armor["texture"], this);
+		textureManager.getTexture(armor["name"]).setSmooth(true);
+	}
+}
+
+void Game::unloadTextures()
+{
+	TextureManager::getInstance().unloadSceneSpecificTextures(this);
+}
+
 bool Game::isReadyToSpawn() {
 	return m_timeSinceSpawn >= m_spawnDelay;
 }
@@ -460,34 +497,6 @@ void Game::loadMap(std::string mapName)
 		rect.setRotation(area["rotation"]);
 		m_restrictedAreas.push_back(rect);
 		*/
-	}
-}
-
-void Game::loadTextures()
-{
-	auto& textureManager = TextureManager::getInstance();
-	std::cout << "loadTextures()\n";
-	textureManager.loadTexture("background", "level_1.png");
-	textureManager.loadTexture("restricted_area", "restricted_area.png");
-	textureManager.getTexture("restricted_area").setRepeated(true);
-	textureManager.getTexture("restricted_area").setSmooth(true);
-	textureManager.loadTexture("shop_bar", "shop_bar.png");
-	textureManager.loadTexture("shop_item_background", "shop_item_background.png");
-	textureManager.loadTexture("buy_button", "buy_button.png");
-
-	for (auto& tower : m_towerAttributes) {
-		std::cout << "Loading texture: " << tower["texture"] << std::endl;
-		textureManager.loadTexture(tower["name"], tower["texture"]);
-		for (auto& projectile : tower["projectiles"]) {
-			textureManager.loadTexture(projectile["name"], projectile["texture"]);
-			textureManager.getTexture(projectile["name"]).setSmooth(true);
-		}
-		textureManager.getTexture(tower["name"]).setSmooth(true);
-	}
-
-	for (auto& armor : m_armorAttributes) {
-		textureManager.loadTexture(armor["name"], armor["texture"]);
-		textureManager.getTexture(armor["name"]).setSmooth(true);
 	}
 }
 
