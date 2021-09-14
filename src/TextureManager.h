@@ -15,7 +15,7 @@ public:
 private:
 	TextureManager() {};
 
-	const std::string m_path = "../img/";
+	const std::string m_path = "../res/img/";
 	std::map<std::string, std::pair<sf::Texture, Scene*>> m_textures;
 public:
 	// Prevent making a copy of the singleton
